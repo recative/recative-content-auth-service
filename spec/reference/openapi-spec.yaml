@@ -1,0 +1,164 @@
+openapi: 3.1.0
+info:
+  title: openapi-spec
+  version: '1.0'
+  summary: For act-server
+servers:
+  - url: 'http://localhost:12212'
+paths:
+  /app/storage:
+    parameters: []
+    post:
+      summary: Batch get storage
+      operationId: post-app-storage
+      responses:
+        '200':
+          $ref: '#/components/responses/storagesResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        description: ''
+      security:
+        - JWT-Authrization: []
+  '/admin/{storage_id}':
+    parameters:
+      - schema:
+          type: string
+        name: storage_id
+        in: path
+        required: true
+    get:
+      summary: Get storage info
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/storageResponse'
+      operationId: get-admin-storage_id
+      security:
+        - X-InternalAuthorization: []
+    put:
+      summary: Update storage
+      operationId: put-admin-storage_id
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageRequest'
+      security:
+        - X-InternalAuthorization: []
+    delete:
+      summary: Delete storage
+      operationId: delete-admin-storage_id
+      responses:
+        '200':
+          description: OK
+      security:
+        - X-InternalAuthorization: []
+  /admin/storage:
+    post:
+      summary: Create Storage
+      operationId: post-admin-storage
+      responses:
+        '200':
+          description: OK
+      security:
+        - X-InternalAuthorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageRequest'
+  /admin/storages:
+    post:
+      summary: Admin batch get storages
+      operationId: post-admin-storages
+      responses:
+        '200':
+          $ref: '#/components/responses/storagesResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      security: []
+      description: ''
+    parameters: []
+components:
+  schemas:
+    StorageResponse:
+      title: StorageResponse
+      x-stoplight:
+        id: qmt3u6ymcguxu
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        need_permissions:
+          type: array
+          items:
+            type: string
+        need_permission_count:
+          type: integer
+        comment:
+          type: string
+      required:
+        - key
+        - value
+        - need_permissions
+        - need_permission_count
+        - comment
+    StorageRequest:
+      title: StorageRequestb
+      x-stoplight:
+        id: qmt3u6ymcguxu
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        need_permissions:
+          type: array
+          items:
+            type: string
+        need_permission_count:
+          type: integer
+        comment:
+          type: string
+      required:
+        - key
+  securitySchemes:
+    JWT-Authrization:
+      type: http
+      scheme: bearer
+      description: Authrization with permission List
+    X-InternalAuthorization:
+      name: xxx
+      type: apiKey
+      in: header
+  responses:
+    storageResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StorageResponse'
+    storagesResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/StorageResponse'
