@@ -24,11 +24,11 @@ paths:
         description: ''
       security:
         - JWT-Authrization: []
-  '/admin/{storage_id}':
+  '/admin/{storage_key}':
     parameters:
       - schema:
           type: string
-        name: storage_id
+        name: storage_key
         in: path
         required: true
     get:

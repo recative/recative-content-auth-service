@@ -3,7 +3,7 @@ package storage_controller
 import (
 	"github.com/recative/recative-backend/definition"
 	"github.com/recative/recative-backend/domain/storage/storage_format"
-	"github.com/recative/recative-backend/domain/storage/storage_service_public"
+	"github.com/recative/recative-backend/domain/storage/storage_service"
 	"github.com/recative/recative-backend/pkg/gin_context"
 	"github.com/recative/recative-backend/pkg/http_engine/http_err"
 	"github.com/recative/recative-backend/pkg/http_engine/response"
@@ -17,7 +17,14 @@ type Controller interface {
 
 type controller struct {
 	db      *gorm.DB
-	service storage_service_public.Service
+	service storage_service.Service
+}
+
+func New(db *gorm.DB, service storage_service.Service) Controller {
+	return &controller{
+		db:      db,
+		service: service,
+	}
 }
 
 func (con *controller) PostAppStorage(c *gin_context.Context[definition.JwtPayload]) {

@@ -5,7 +5,7 @@ import (
 	"github.com/recative/recative-backend/spec"
 )
 
-func StorageToResponse(storage storage_model.Storage) spec.StorageResponse {
+func StorageToResponse(storage *storage_model.Storage) spec.StorageResponse {
 	return spec.StorageResponse{
 		Comment:             storage.Comment,
 		Key:                 storage.Key,
@@ -18,7 +18,37 @@ func StorageToResponse(storage storage_model.Storage) spec.StorageResponse {
 func StoragesToResponse(storage []*storage_model.Storage) []spec.StorageResponse {
 	res := make([]spec.StorageResponse, 0, len(storage))
 	for _, s := range storage {
-		res = append(res, StorageToResponse(*s))
+		res = append(res, StorageToResponse(s))
 	}
 	return res
+}
+
+func RequestStorageToStorageParam(req spec.StorageRequest) storage_model.StorageParams {
+	var comment string
+	if req.Comment != nil {
+		comment = *req.Comment
+	}
+
+	var needPermissionCount int
+	if req.NeedPermissionCount != nil {
+		needPermissionCount = *req.NeedPermissionCount
+	}
+
+	var needPermission []string
+	if req.NeedPermissions != nil {
+		needPermission = *req.NeedPermissions
+	}
+
+	var value string
+	if req.Value != nil {
+		value = *req.Value
+	}
+
+	return storage_model.StorageParams{
+		Comment:             comment,
+		Key:                 req.Key,
+		NeedPermissionCount: needPermissionCount,
+		NeedPermissions:     needPermission,
+		Value:               value,
+	}
 }

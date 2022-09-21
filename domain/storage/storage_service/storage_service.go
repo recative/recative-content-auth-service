@@ -9,3 +9,9 @@ type Service interface {
 type service struct {
 	storage_service_public.Service
 }
+
+func New(storageServicePublic storage_service_public.Service) Service {
+	return &service{
+		storageServicePublic,
+	}
+}

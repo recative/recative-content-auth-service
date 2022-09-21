@@ -34,7 +34,7 @@ func (dep *Dependence) Start() {
 	}
 }
 
-func AutoInit() *Dependence {
+func AutoInit(customLogic gin_context.CustomLogic) *Dependence {
 	var dbConfig db.Config
 	env.Parse(&dbConfig)
 
@@ -61,7 +61,7 @@ func AutoInit() *Dependence {
 
 	var crossMicroServiceConfig cross_micro_service.CrossMicroServiceConfig
 	env.Parse(&crossMicroServiceConfig)
-	gin_context.Init(auther, crossMicroServiceConfig.HarmonyAuthorizationToken, nil)
+	gin_context.Init(auther, crossMicroServiceConfig.HarmonyAuthorizationToken, customLogic)
 
 	cron := func() cronjob.Cron {
 		var cronConfig cronjob.Config

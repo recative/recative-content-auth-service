@@ -15,6 +15,13 @@ type service struct {
 	model storage_model.Model
 }
 
+func New(db *gorm.DB, model storage_model.Model) Service {
+	return &service{
+		db,
+		model,
+	}
+}
+
 func (s *service) ReadStoragesByKeysAndPermissions(keys []string, permissions []string) ([]*storage_model.Storage, error) {
 	res := make([]*storage_model.Storage, 0, len(keys))
 
