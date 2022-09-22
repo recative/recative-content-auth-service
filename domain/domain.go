@@ -2,20 +2,35 @@ package domain
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/gin-gonic/gin"
+	"github.com/recative/recative-backend-sdk/pkg/auth"
+	"github.com/recative/recative-backend-sdk/pkg/gin_context"
+	"github.com/recative/recative-backend-sdk/pkg/http_engine/middleware"
 	"github.com/recative/recative-backend/domain/storage"
 	"github.com/recative/recative-backend/domain/storage_admin"
-	"github.com/recative/recative-backend/pkg"
-	"github.com/recative/recative-backend/pkg/http_engine/middleware"
 	"github.com/recative/recative-backend/spec"
-	"github.com/recative/recative-backend/utils/must"
+	"gorm.io/gorm"
 )
 
-func Init(dep *pkg.Dependence) {
+type Dependence struct {
+	Db         *gorm.DB
+	HttpEngine *gin.Engine
+	Auther     auth.Authable
+}
+
+func Init(dep *Dependence) {
 	var apiSpec = func() *openapi3.T {
 		swagger, err := spec.GetSwagger()
-		must.Must(err)
+		if err != nil {
+			panic(err)
+		}
 		return swagger
 	}()
+
+	gin_context.Init(gin_context.ContextDependence{
+		Auther:      dep.Auther,
+		CustomLogic: nil,
+	})
 
 	appGroup := dep.HttpEngine.Group("/app", middleware.OpenapiValidator(apiSpec))
 	adminGroup := dep.HttpEngine.Group("/admin", middleware.OpenapiValidator(apiSpec))
