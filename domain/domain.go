@@ -2,9 +2,9 @@ package domain
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/gin-gonic/gin"
 	"github.com/recative/recative-backend-sdk/pkg/auth"
 	"github.com/recative/recative-backend-sdk/pkg/gin_context"
+	"github.com/recative/recative-backend-sdk/pkg/http_engine"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine/middleware"
 	"github.com/recative/recative-backend/domain/storage"
 	"github.com/recative/recative-backend/domain/storage_admin"
@@ -14,7 +14,7 @@ import (
 
 type Dependence struct {
 	Db         *gorm.DB
-	HttpEngine *gin.Engine
+	HttpEngine *http_engine.CustomHttpEngine
 	Auther     auth.Authable
 }
 

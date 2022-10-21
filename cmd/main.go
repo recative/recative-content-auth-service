@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/recative/recative-backend-sdk/pkg/auth"
+	"github.com/recative/recative-backend-sdk/pkg/config"
 	"github.com/recative/recative-backend-sdk/pkg/db"
-	"github.com/recative/recative-backend-sdk/pkg/env"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine"
 	"github.com/recative/recative-backend/domain"
 	//"github.com/recative/recative-backend-sdk/pkg"
@@ -11,15 +11,15 @@ import (
 
 func main() {
 	var dbConfig db.Config
-	env.ForceParse(&dbConfig)
+	config.ForceParseByKey("database", &dbConfig)
 	db := db.New(dbConfig)
 
 	var httpEngineConfig http_engine.Config
-	env.ForceParse(&httpEngineConfig)
-	httpEngine := http_engine.Default()
+	config.ForceParseByKey("http_engine", &httpEngineConfig)
+	httpEngine := http_engine.Default(httpEngineConfig)
 
 	var authConfig auth.Config
-	env.ForceParse(&authConfig)
+	config.ForceParseByKey("auth", &authConfig)
 	auther := auth.New(authConfig)
 
 	domain.Init(&domain.Dependence{

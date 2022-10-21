@@ -1,0 +1,11 @@
+database:
+  is_auto_migrate: false
+  pgsql_uri: ''
+  pgsql_max_idle: 5
+  pgsql_max_open: 10
+http_engine:
+  is_log_request_body: true
+  server_host: 'example.com'
+  listen_addr: ':12211' # must start with `:`
+auth:
+  jwt_secret: ''
