@@ -46,10 +46,14 @@ jobs:
           tags: |
             type=schedule,pattern={{date 'YYYYMMDD_hhmmss'}}
             type=raw,value=latest
+            
+      - name: Go build
+        run: go build -v -o "dist/recative-content-auth-service" "cmd/main.go"
 
       - name: Build & push docker image
         uses: docker/build-push-action@v3
         with:
+          file: docker/test/Dockerfile
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
