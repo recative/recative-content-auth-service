@@ -8,7 +8,6 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV ENVIRONMENT PROD
 
 ADD dist/recative-content-auth-service /app/
-ADD dist/base /app/
 
 EXPOSE 80
 
