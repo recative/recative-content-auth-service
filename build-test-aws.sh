@@ -25,6 +25,11 @@ IMAGE_LATEST_TAG="${IMAGE_NAME}:latest"
 rm -rf "${DIST_DIR:?}"
 mkdir "${DIST_DIR:?}"
 
+prepare(){
+  go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.11.0
+  go generate ./...
+}
+
 serverBuild(){
     echo "------> build ${APP_NAME} ${VERSION}"
 
@@ -57,6 +62,7 @@ pushImage(){
     fi
 }
 
+prepare
 serverBuild
 dockerBuild
 pushImage

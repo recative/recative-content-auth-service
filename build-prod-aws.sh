@@ -25,6 +25,11 @@ IMAGE_LATEST_TAG="${IMAGE_NAME}:stable"
 rm -rf "${DIST_DIR:?}"
 mkdir "${DIST_DIR:?}"
 
+prepare(){
+  go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.11.0
+  go generate ./...
+}
+
 gitCheck(){
     git fetch --tags
     echo "Git Check"
@@ -67,6 +72,7 @@ pushImage(){
 #    fi
 }
 
+prepare
 gitCheck
 serverBuild
 dockerBuild
