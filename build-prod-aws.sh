@@ -43,12 +43,6 @@ serverBuild(){
     fi
 }
 
-baseDataBuild(){
-    echo "------> build base data"
-
-    go build -v -o "${DIST_DIR}/base" "${RUN_DIR}/base/base.go"
-}
-
 dockerBuild(){
     echo "Docker Build"
     if [[ -f ${DOCKER_DIR}/Dockerfile ]];then
@@ -75,7 +69,6 @@ pushImage(){
 
 gitCheck
 serverBuild
-baseDataBuild
 dockerBuild
 pushImage
 
