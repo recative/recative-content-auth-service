@@ -46,7 +46,13 @@ jobs:
           tags: |
             type=schedule,pattern={{date 'YYYYMMDD_hhmmss'}}
             type=raw,value=latest
-            
+      
+      - name: Install OpenAPI
+        run: go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.11.0
+      
+      - name: Generate API
+        run: go generate ./...
+
       - name: Go build
         run: go build -v -o "dist/recative-content-auth-service" "cmd/main.go"
 
