@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - main
   workflow_dispatch:
 env:
   IMAGE_NAME: ${{ github.repository }}
@@ -50,4 +51,4 @@ jobs:
       - name: run build-push-test-aws.sh
         run: ./build-test-github.sh $IMAGE_NAME
         env:
-          IMAGE_NAME=${{ env.IMAGE_NAME }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
