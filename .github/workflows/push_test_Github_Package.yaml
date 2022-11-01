@@ -49,6 +49,6 @@ jobs:
             type=raw,value=latest
 
       - name: run build-push-test-aws.sh
-        run: ./build-test-github.sh $IMAGE_NAME
+        run: ./build-test-github.sh "$IMAGE_NAME"
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}

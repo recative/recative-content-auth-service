@@ -18,6 +18,8 @@ REGISTRY_NAMESPACE="recative"
 TAG="$(date +'%y%m%d%H%M')"
 
 APP_NAME="$1"
+echo "$1"
+echo "$APP_NAME"
 IMAGE_NAME="${REGISTRY_HOST}/${REGISTRY_NAMESPACE}/${APP_NAME}"
 IMAGE_FULL_TAG="${IMAGE_NAME}:${TAG}"
 IMAGE_LATEST_TAG="${IMAGE_NAME}:latest"
@@ -34,6 +36,7 @@ serverBuild(){
     echo "------> build ${APP_NAME} ${VERSION}"
 
 	  if [[ -f "${RUN_DIR}/main.go" ]]; then
+	    echo "${DIST_DIR}/${APP_NAME}"
 	    go build -v -o "${DIST_DIR}/${APP_NAME}" "${RUN_DIR}/main.go"
     fi
 }
