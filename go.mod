@@ -6,7 +6,7 @@ require (
 	github.com/getkin/kin-openapi v0.103.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/google/uuid v1.3.0
-	github.com/recative/recative-backend-sdk v0.2.7
+	github.com/recative/recative-backend-sdk v0.2.8
 	github.com/samber/lo v1.28.2
 	gorm.io/gorm v1.23.9
 )

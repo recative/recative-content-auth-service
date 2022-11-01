@@ -17,6 +17,7 @@ func main() {
 	var httpEngineConfig http_engine.Config
 	config.ForceParseByKey("http_engine", &httpEngineConfig)
 	httpEngine := http_engine.Default(httpEngineConfig)
+	httpEngine.AddPing()
 
 	var authConfig auth.Config
 	config.ForceParseByKey("auth", &authConfig)

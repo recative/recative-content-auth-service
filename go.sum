@@ -281,6 +281,8 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
 github.com/recative/recative-backend-sdk v0.2.7 h1:ZxLfaPqfFQ1JNz+zOaSLD2TyrQS24DffQh7QYrVQ96Q=
 github.com/recative/recative-backend-sdk v0.2.7/go.mod h1:gFP5vWNMX4NVvyGa9z38CwyUt3pyNPZBDaBpTFAoi1U=
+github.com/recative/recative-backend-sdk v0.2.8 h1:oKH9skEyun5zx323wM0zMtUPP8kV0McfHMTF6Pt0YcQ=
+github.com/recative/recative-backend-sdk v0.2.8/go.mod h1:gFP5vWNMX4NVvyGa9z38CwyUt3pyNPZBDaBpTFAoi1U=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/rogpeppe/go-internal v1.6.1/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTEfhy4qGm1nDQc=
 github.com/rogpeppe/go-internal v1.8.0 h1:FCbCCtXNOY3UtUuHUYaghJg4y7Fd14rXifAYUAtL9R8=
