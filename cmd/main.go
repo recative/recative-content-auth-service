@@ -10,6 +10,11 @@ import (
 )
 
 func main() {
+	err := config.Init()
+	if err != nil {
+		panic(err)
+	}
+
 	var dbConfig db.Config
 	config.ForceParseByKey("database", &dbConfig)
 	db := db.New(dbConfig)
@@ -29,7 +34,7 @@ func main() {
 		Auther:     auther,
 	})
 
-	err := httpEngine.Run(httpEngineConfig.ListenAddr)
+	err = httpEngine.Run(httpEngineConfig.ListenAddr)
 	if err != nil {
 		panic(err)
 	}
