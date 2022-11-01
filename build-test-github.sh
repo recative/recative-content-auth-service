@@ -17,7 +17,7 @@ REGISTRY_NAMESPACE="recative"
 
 TAG="$(date +'%y%m%d%H%M')"
 
-APP_NAME="$1"
+APP_NAME="recative-content-auth-service"
 echo "$1"
 echo "$APP_NAME"
 IMAGE_NAME="${REGISTRY_HOST}/${REGISTRY_NAMESPACE}/${APP_NAME}"
