@@ -12,6 +12,7 @@ type StorageModel interface {
 	UpdateStorageByKey(key string, storageParams StorageParams) error
 	ReadStorageByKey(key string) (*Storage, error)
 	ReadStorageByKeys(key []string) ([]*Storage, error)
+	ReadAllStorage() ([]*Storage, error)
 	DeleteStorageByKey(key string) (*Storage, error)
 	IsExistStorageByKey(key string) (bool, error)
 }
@@ -71,6 +72,15 @@ func (m *model) ReadStorageByKey(key string) (*Storage, error) {
 func (m *model) ReadStorageByKeys(key []string) ([]*Storage, error) {
 	var storages []*Storage
 	err := m.DB.Where("key IN ?", key).Find(&storages).Error
+	if err != nil {
+		return nil, db_err.Wrap(err)
+	}
+	return storages, nil
+}
+
+func (m *model) ReadAllStorage() ([]*Storage, error) {
+	var storages []*Storage
+	err := m.DB.Find(&storages).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}

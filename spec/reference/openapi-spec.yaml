@@ -24,6 +24,7 @@ paths:
         description: ''
       security:
         - JWT-Authrization: []
+      description: ''
   '/admin/{storage_key}':
     parameters:
       - schema:
@@ -40,6 +41,7 @@ paths:
       operationId: get-admin-storage_id
       security:
         - X-InternalAuthorization: []
+      description: ''
     put:
       summary: Update storage
       operationId: put-admin-storage_id
@@ -77,7 +79,7 @@ paths:
               $ref: '#/components/schemas/StorageRequest'
   /admin/storages:
     post:
-      summary: Admin batch get storages
+      summary: Admin batch get storages by keys
       operationId: post-admin-storages
       responses:
         '200':
@@ -89,9 +91,18 @@ paths:
               type: array
               items:
                 type: string
-      security: []
+      security:
+        - X-InternalAuthorization: []
       description: ''
     parameters: []
+    get:
+      summary: Admin get all storages
+      operationId: get-admin-storages
+      responses:
+        '200':
+          description: OK
+      security:
+        - X-InternalAuthorization: []
 components:
   schemas:
     StorageResponse:

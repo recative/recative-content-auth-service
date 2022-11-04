@@ -15,6 +15,9 @@ func main() {
 		panic(err)
 	}
 
+	var domainConfig domain.Config
+	config.ForceParseByKey("domain", &domainConfig)
+
 	var dbConfig db.Config
 	config.ForceParseByKey("database", &dbConfig)
 	db := db.New(dbConfig)
@@ -32,7 +35,7 @@ func main() {
 		Db:         db,
 		HttpEngine: httpEngine,
 		Auther:     auther,
-	})
+	}, domainConfig)
 
 	err = httpEngine.Run(httpEngineConfig.ListenAddr)
 	if err != nil {

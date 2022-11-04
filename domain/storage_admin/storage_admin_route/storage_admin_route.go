@@ -7,10 +7,11 @@ import (
 )
 
 func Init(adminGroup *gin.RouterGroup, storageAdminController storage_admin_controller.Controller) {
-	adminGroup.GET("/:storage_key", gin_context.Handler(storageAdminController.GetStorageByKey))
-	adminGroup.PUT("/:storage_key", gin_context.Handler(storageAdminController.PutStorageByKey))
-	adminGroup.DELETE("/:storage_key", gin_context.Handler(storageAdminController.DeleteStorageByKey))
+	adminGroup.GET("/:storage_key", gin_context.InternalHandler(storageAdminController.GetStorageByKey))
+	adminGroup.PUT("/:storage_key", gin_context.InternalHandler(storageAdminController.PutStorageByKey))
+	adminGroup.DELETE("/:storage_key", gin_context.InternalHandler(storageAdminController.DeleteStorageByKey))
 
-	adminGroup.POST("/storage", gin_context.Handler(storageAdminController.CreateStorage))
-	adminGroup.POST("/storages", gin_context.Handler(storageAdminController.BatchGetStorage))
+	adminGroup.POST("/storage", gin_context.InternalHandler(storageAdminController.CreateStorage))
+	adminGroup.POST("/storages", gin_context.InternalHandler(storageAdminController.BatchGetStorage))
+	adminGroup.GET("/storages", gin_context.InternalHandler(storageAdminController.GetAllStorages))
 }

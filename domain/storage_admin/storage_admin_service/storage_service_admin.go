@@ -13,6 +13,7 @@ type Service interface {
 	DeleteStorageByKey(key string) (*storage_model.Storage, error)
 	CreateStorage(storageParams storage_model.StorageParams) error
 	ReadStoragesByKeys(keys []string) ([]*storage_model.Storage, error)
+	ReadAllStorages() ([]*storage_model.Storage, error)
 }
 
 type service struct {
@@ -47,4 +48,8 @@ func (s *service) CreateStorage(storageParams storage_model.StorageParams) error
 
 func (s *service) ReadStoragesByKeys(keys []string) ([]*storage_model.Storage, error) {
 	return s.model.ReadStorageByKeys(keys)
+}
+
+func (s *service) ReadAllStorages() ([]*storage_model.Storage, error) {
+	return s.model.ReadAllStorage()
 }

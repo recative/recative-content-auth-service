@@ -1,10 +1,14 @@
 package domain
 
 import (
+	"fmt"
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 	"github.com/recative/recative-backend-sdk/pkg/auth"
 	"github.com/recative/recative-backend-sdk/pkg/gin_context"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine"
+	"github.com/recative/recative-backend-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine/middleware"
 	"github.com/recative/recative-backend/domain/storage"
 	"github.com/recative/recative-backend/domain/storage_admin"
@@ -18,7 +22,7 @@ type Dependence struct {
 	Auther     auth.Authable
 }
 
-func Init(dep *Dependence) {
+func Init(dep *Dependence, config Config) {
 	var apiSpec = func() *openapi3.T {
 		swagger, err := spec.GetSwagger()
 		if err != nil {
@@ -27,9 +31,23 @@ func Init(dep *Dependence) {
 		return swagger
 	}()
 
+	gin_context.InitInternalContext(gin_context.InternalContextDependence{
+		AuthorizationToken: config.CrossMicroServiceConfig.AdminAuthorizationToken,
+	})
+
 	gin_context.Init(gin_context.ContextDependence{
-		Auther:      dep.Auther,
-		CustomLogic: nil,
+		Auther: dep.Auther,
+		CustomLogic: func(claims jwt.MapClaims, c *gin.Context) error {
+			_, securityRequired := c.Get("security_required")
+
+			userId := claims["user_id"]
+
+			if userId == 0 && securityRequired {
+				return http_err.InvalidArgument.New(fmt.Sprintf("invalid user id %#v", userId))
+			}
+
+			return nil
+		},
 	})
 
 	appGroup := dep.HttpEngine.Group("/app", middleware.OpenapiValidator(apiSpec))
