@@ -1,7 +1,7 @@
 domain:
-  cross_micro_service:
+  storage_admin_service:
     admin_authorization_token: "xxx"
-atabase:
+database:
   is_auto_migrate: false
   pgsql_uri: 'avc'
   pgsql_max_idle: 5

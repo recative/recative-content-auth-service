@@ -25,7 +25,7 @@ paths:
       security:
         - JWT-Authrization: []
       description: ''
-  '/admin/{storage_key}':
+  '/admin/storage/{storage_key}':
     parameters:
       - schema:
           type: string
@@ -100,9 +100,86 @@ paths:
       operationId: get-admin-storages
       responses:
         '200':
+          $ref: '#/components/responses/storagesResponse'
+      security:
+        - X-InternalAuthorization: []
+  '/admin/permission/{permission_id}':
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/permissionResponse'
+      operationId: get-admin-permission
+      description: ''
+      security:
+        - X-InternalAuthorization: []
+    put:
+      summary: ''
+      operationId: put-admin-permission
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionRequest'
+      security:
+        - X-InternalAuthorization: []
+    delete:
+      summary: ''
+      operationId: delete-admin-permission
+      responses:
+        '200':
           description: OK
       security:
         - X-InternalAuthorization: []
+    parameters:
+      - schema:
+          type: string
+        name: permission_id
+        in: path
+        required: true
+  /admin/permission:
+    post:
+      summary: ''
+      operationId: post-admin-permission
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionRequest'
+      security:
+        - X-InternalAuthorization: []
+  /admin/permissions:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/permissionsResponse'
+      operationId: get-admin-permissions
+      security:
+        - X-InternalAuthorization: []
+    post:
+      summary: ''
+      operationId: post-admin-permissions
+      responses:
+        '200':
+          description: OK
+      security:
+        - X-InternalAuthorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
 components:
   schemas:
     StorageResponse:
@@ -130,7 +207,7 @@ components:
         - need_permission_count
         - comment
     StorageRequest:
-      title: StorageRequestb
+      title: StorageRequest
       x-stoplight:
         id: qmt3u6ymcguxu
       type: object
@@ -149,6 +226,30 @@ components:
           type: string
       required:
         - key
+    PermissionResponse:
+      title: PermissionResponse
+      x-stoplight:
+        id: 5pk2wpi5pur7w
+      type: object
+      properties:
+        id:
+          type: string
+        comment:
+          type: string
+      required:
+        - id
+    PermissionRequest:
+      title: PermissionRequest
+      x-stoplight:
+        id: hh2wlqjltly4q
+      type: object
+      properties:
+        id:
+          type: string
+        comment:
+          type: string
+      required:
+        - id
   securitySchemes:
     JWT-Authrization:
       type: http
@@ -173,3 +274,17 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/StorageResponse'
+    permissionResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PermissionResponse'
+    permissionsResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/PermissionResponse'

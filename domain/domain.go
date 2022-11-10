@@ -10,6 +10,7 @@ import (
 	"github.com/recative/recative-backend-sdk/pkg/http_engine"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine/middleware"
+	"github.com/recative/recative-backend/domain/permission"
 	"github.com/recative/recative-backend/domain/storage"
 	"github.com/recative/recative-backend/domain/storage_admin"
 	"github.com/recative/recative-backend/spec"
@@ -59,6 +60,11 @@ func Init(dep *Dependence, config Config) {
 		})
 
 		storage_admin.Init(&storage_admin.Dependence{
+			Db:         dep.Db,
+			AdminGroup: adminGroup,
+		})
+
+		permission.Init(&permission.Dependence{
 			Db:         dep.Db,
 			AdminGroup: adminGroup,
 		})
