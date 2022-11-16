@@ -3,6 +3,7 @@ info:
   title: openapi-spec
   version: '1.0'
   summary: For act-server
+  description: 'If you are trying to figure out admin api, see `/admin/sudo` first please.'
 servers:
   - url: 'http://localhost:12212'
 paths:
@@ -14,17 +15,9 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/storagesResponse'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: string
-        description: ''
       security:
         - JWT-Authrization: []
-      description: ''
+      description: Normal user get all storage value by keys which embed in jwt authrization.
   '/admin/storage/{storage_key}':
     parameters:
       - schema:
@@ -41,7 +34,9 @@ paths:
       operationId: get-admin-storage_id
       security:
         - X-InternalAuthorization: []
-      description: ''
+      description: |
+        Get key/value storage info by stroage key.
+      x-internal: true
     put:
       summary: Update storage
       operationId: put-admin-storage_id
@@ -53,8 +48,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/StorageRequest'
+        description: ''
       security:
         - X-InternalAuthorization: []
+      description: |-
+        Update key/value storage.
+        key in request body will be ignore.
+      x-internal: true
     delete:
       summary: Delete storage
       operationId: delete-admin-storage_id
@@ -63,6 +63,8 @@ paths:
           description: OK
       security:
         - X-InternalAuthorization: []
+      description: Delete key/value sorage by storage_key.
+      x-internal: true
   /admin/storage:
     post:
       summary: Create Storage
@@ -77,6 +79,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/StorageRequest'
+      description: Create a record in kv storage.
+      x-internal: true
   /admin/storages:
     post:
       summary: Admin batch get storages by keys
@@ -89,23 +93,48 @@ paths:
           application/json:
             schema:
               type: array
+              description: string is storage_key
               items:
                 type: string
+        description: ''
       security:
         - X-InternalAuthorization: []
       description: ''
     parameters: []
     get:
-      summary: Admin get all storages
+      summary: Admin get storages by query params
       operationId: get-admin-storages
       responses:
         '200':
           $ref: '#/components/responses/storagesResponse'
       security:
         - X-InternalAuthorization: []
+      description: |-
+        if request body is empty, will return all storages.
+        include_permission will effect first.
+      x-internal: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+          application/xml:
+            schema:
+              type: object
+              properties:
+                include_permission:
+                  type: array
+                  items:
+                    type: string
+                exclude_permission:
+                  type: array
+                  items:
+                    type: string
+        description: ''
   '/admin/permission/{permission_id}':
     get:
-      summary: Your GET endpoint
+      summary: Admin get permission info
       tags: []
       responses:
         '200':
@@ -115,7 +144,7 @@ paths:
       security:
         - X-InternalAuthorization: []
     put:
-      summary: ''
+      summary: Admin update permission
       operationId: put-admin-permission
       responses:
         '200':
@@ -127,14 +156,16 @@ paths:
               $ref: '#/components/schemas/PermissionRequest'
       security:
         - X-InternalAuthorization: []
+      description: permission_id in request body will be ignored.
     delete:
-      summary: ''
+      summary: Admin delete permission
       operationId: delete-admin-permission
       responses:
         '200':
           description: OK
       security:
         - X-InternalAuthorization: []
+      description: ''
     parameters:
       - schema:
           type: string
@@ -143,7 +174,7 @@ paths:
         required: true
   /admin/permission:
     post:
-      summary: ''
+      summary: Admin create permission
       operationId: post-admin-permission
       responses:
         '200':
@@ -157,7 +188,7 @@ paths:
         - X-InternalAuthorization: []
   /admin/permissions:
     get:
-      summary: Your GET endpoint
+      summary: Admin get permission by query params
       tags: []
       responses:
         '200':
@@ -165,8 +196,18 @@ paths:
       operationId: get-admin-permissions
       security:
         - X-InternalAuthorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                regxp:
+                  type: string
+        description: ''
+      description: 'if request body is empty, will return all permissions.'
     post:
-      summary: ''
+      summary: Admin get permission by permission id
       operationId: post-admin-permissions
       responses:
         '200':
@@ -178,8 +219,123 @@ paths:
           application/json:
             schema:
               type: array
+              description: array of permission id
               items:
                 type: string
+      description: ''
+  '/admin/token/{token}':
+    parameters:
+      - schema:
+          type: string
+        name: token
+        in: path
+        required: true
+    put:
+      summary: Update token info
+      operationId: put-admin-authrization_token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      responses:
+        '200':
+          description: OK
+      security:
+        - X-InternalAuthorization: []
+    delete:
+      summary: Delete token
+      operationId: delete-admin-authrization_token
+      responses:
+        '200':
+          description: OK
+      security:
+        - X-InternalAuthorization: []
+    get:
+      summary: Get token info
+      operationId: get-admin-token
+      responses:
+        '200':
+          description: OK
+      security:
+        - X-InternalAuthorization: []
+  /admain/token:
+    post:
+      summary: Create new token
+      operationId: post-admain-token
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      security:
+        - X-InternalAuthorization: []
+    parameters: []
+  /admin/tokens:
+    get:
+      summary: Get all tokens
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/tokensResponse'
+      operationId: get-admin-auth-tokens
+      parameters: []
+      security:
+        - X-InternalAuthorization: []
+    post:
+      summary: Get token by token id
+      operationId: post-admin-auth-tokens
+      responses:
+        '200':
+          $ref: '#/components/responses/tokensResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              description: array of token id
+              items:
+                type: string
+        description: 'if request body is empty, return all tokens.'
+      description: ''
+      security:
+        - X-InternalAuthorization: []
+    parameters: []
+  /admin/sudo:
+    post:
+      summary: Get sudo token
+      operationId: post-admin-sudo
+      responses:
+        '200':
+          $ref: '#/components/responses/rawTokenResponse'
+      description: |-
+        Temperature get a highest permission admin token, which will expired in 5 mintues.
+        Use this token create new token by `/admin/token/xxx` apis.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sudo_token:
+                  type: string
+              required:
+                - sudo_token
+  /admin/temp_user_token:
+    get:
+      summary: Admin get temp user token
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/rawTokenResponse'
+      operationId: get-admin-temp_token
+      description: Generate an temp user token with all permissions and expired in 5 minutes for `/app/storage` api for test.
+      security:
+        - X-InternalAuthorization: []
+    parameters: []
 components:
   schemas:
     StorageResponse:
@@ -250,6 +406,56 @@ components:
           type: string
       required:
         - id
+    TokenRequest:
+      title: TokenRequest
+      x-stoplight:
+        id: xkj945hqugj19
+      type: object
+      properties:
+        token:
+          type: string
+        admin_permission:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminPermission'
+        comment:
+          type: string
+    TokenResponse:
+      title: TokenResponse
+      x-stoplight:
+        id: ffhfz5wptg7kp
+      type: object
+      properties:
+        token:
+          type: string
+        admin_permission:
+          type: array
+          items:
+            type: string
+        comment:
+          type: string
+      required:
+        - token
+        - admin_permission
+        - comment
+    AdminPermission:
+      type: string
+      title: AdminPermission
+      x-stoplight:
+        id: m6kotko76v9bt
+      enum:
+        - read
+        - write
+    RawTokenResponse:
+      title: RawTokenResponse
+      x-stoplight:
+        id: iw0trifdwfswe
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+        - token
   securitySchemes:
     JWT-Authrization:
       type: http
@@ -288,3 +494,23 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/PermissionResponse'
+    tokenResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenResponse'
+    rawTokenResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RawTokenResponse'
+    tokensResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/TokenResponse'
