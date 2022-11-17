@@ -7,9 +7,9 @@ import (
 )
 
 func Init(adminGroup *gin.RouterGroup, permissionController permission_controller.Controller) {
-	adminGroup.GET("/:permission_id", gin_context.NoSecurityHandler(permissionController.GetPermissionById))
-	adminGroup.PUT("/:permission_id", gin_context.NoSecurityHandler(permissionController.PutPermissionById))
-	adminGroup.DELETE("/:permission_id", gin_context.NoSecurityHandler(permissionController.DeletePermissionById))
+	adminGroup.GET("/permission/:permission_id", gin_context.NoSecurityHandler(permissionController.GetPermissionById))
+	adminGroup.PUT("/permission/:permission_id", gin_context.NoSecurityHandler(permissionController.PutPermissionById))
+	adminGroup.DELETE("/permission/:permission_id", gin_context.NoSecurityHandler(permissionController.DeletePermissionById))
 	adminGroup.POST("/permission", gin_context.NoSecurityHandler(permissionController.CreatePermission))
 
 	adminGroup.POST("/permissions", gin_context.NoSecurityHandler(permissionController.GetAllPermissions))
