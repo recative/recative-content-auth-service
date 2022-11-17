@@ -373,10 +373,10 @@ paths:
             schema:
               type: object
               properties:
-                sudo_token:
+                root_token:
                   type: string
               required:
-                - sudo_token
+                - root_token
       x-internal: true
   /admin/temp_user_token:
     get:

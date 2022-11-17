@@ -14,6 +14,6 @@ func Init(adminGroup *gin.RouterGroup, adminTokenController admin_token_controll
 	adminGroup.GET("/tokens", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.GetAllTokens))
 	adminGroup.POST("/tokens", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.GetSelectTokens))
 
-	adminGroup.POST("/sudo", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.GetSudoToken))
+	adminGroup.POST("/sudo", gin_context.NoSecurityHandler(adminTokenController.GetSudoToken))
 	adminGroup.GET("/temp_user_token", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.GetTempToken))
 }

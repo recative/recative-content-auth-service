@@ -151,7 +151,7 @@ func (con *controller) GetSudoToken(c *gin_context.NoSecurityContext) {
 		return
 	}
 
-	sudoToken, err := con.service.CreateSudoToken(body.SudoToken)
+	sudoToken, err := con.service.CreateSudoToken(body.RootToken)
 	if err != nil {
 		response.Err(c.C, err)
 		return
