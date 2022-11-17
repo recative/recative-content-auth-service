@@ -9,7 +9,6 @@ import (
 	"github.com/recative/recative-backend-sdk/pkg/gin_context"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine/http_err"
-	"github.com/recative/recative-backend-sdk/pkg/http_engine/middleware"
 	"github.com/recative/recative-backend/domain/admin_token"
 	"github.com/recative/recative-backend/domain/permission"
 	"github.com/recative/recative-backend/domain/storage"
@@ -48,8 +47,8 @@ func Init(dep *Dependence, config Config) {
 		},
 	})
 
-	appGroup := dep.HttpEngine.Group("/app", middleware.OpenapiValidator(apiSpec))
-	adminGroup := dep.HttpEngine.Group("/admin", middleware.OpenapiValidator(apiSpec))
+	appGroup := dep.HttpEngine.Group("/app")
+	adminGroup := dep.HttpEngine.Group("/admin")
 	{
 		storage.Init(&storage.Dependence{
 			Db:       dep.Db,
