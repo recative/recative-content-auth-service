@@ -2,7 +2,6 @@ package domain
 
 import (
 	"fmt"
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"github.com/recative/recative-backend-sdk/pkg/auth"
@@ -13,7 +12,6 @@ import (
 	"github.com/recative/recative-backend/domain/permission"
 	"github.com/recative/recative-backend/domain/storage"
 	"github.com/recative/recative-backend/domain/storage_admin"
-	"github.com/recative/recative-backend/spec"
 	"gorm.io/gorm"
 )
 
@@ -24,13 +22,13 @@ type Dependence struct {
 }
 
 func Init(dep *Dependence, config Config) {
-	var apiSpec = func() *openapi3.T {
-		swagger, err := spec.GetSwagger()
-		if err != nil {
-			panic(err)
-		}
-		return swagger
-	}()
+	//var apiSpec = func() *openapi3.T {
+	//	swagger, err := spec.GetSwagger()
+	//	if err != nil {
+	//		panic(err)
+	//	}
+	//	return swagger
+	//}()
 
 	gin_context.Init(gin_context.ContextDependence{
 		Auther: dep.Auther,
