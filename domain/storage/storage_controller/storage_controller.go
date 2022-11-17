@@ -29,7 +29,6 @@ func New(db *gorm.DB, service storage_service.Service) Controller {
 
 func (con *controller) PostAppStorage(c *gin_context.Context[definition.JwtPayload]) {
 	var body spec.PostAppStorageJSONRequestBody
-
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {
 		response.Err(c.C, http_err.InvalidArgument.Wrap(err))

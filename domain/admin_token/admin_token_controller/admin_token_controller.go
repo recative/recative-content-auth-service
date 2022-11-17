@@ -12,14 +12,14 @@ import (
 )
 
 type Controller interface {
-	GetInfoByToken(c *gin_context.InternalContext)
-	PutTokenInfo(c *gin_context.InternalContext)
-	DeleteToken(c *gin_context.InternalContext)
-	CreateToken(c *gin_context.InternalContext)
-	GetAllTokens(c *gin_context.InternalContext)
-	GetSelectTokens(c *gin_context.InternalContext)
-	GetSudoToken(c *gin_context.InternalContext)
-	GetTempToken(c *gin_context.InternalContext)
+	GetInfoByToken(c *gin_context.NoSecurityContext)
+	PutTokenInfo(c *gin_context.NoSecurityContext)
+	DeleteToken(c *gin_context.NoSecurityContext)
+	CreateToken(c *gin_context.NoSecurityContext)
+	GetAllTokens(c *gin_context.NoSecurityContext)
+	GetSelectTokens(c *gin_context.NoSecurityContext)
+	GetSudoToken(c *gin_context.NoSecurityContext)
+	GetTempToken(c *gin_context.NoSecurityContext)
 	CheckAdminTokenPermission(c *gin_context.NoSecurityContext)
 }
 
@@ -37,7 +37,7 @@ func New(db *gorm.DB, service admin_token_service.Service, config admin_token_co
 	}
 }
 
-func (con *controller) GetInfoByToken(c *gin_context.InternalContext) {
+func (con *controller) GetInfoByToken(c *gin_context.NoSecurityContext) {
 	tokenRaw := c.C.Param("token")
 	if tokenRaw == "" {
 		response.Err(c.C, http_err.InvalidArgument)
@@ -55,7 +55,7 @@ func (con *controller) GetInfoByToken(c *gin_context.InternalContext) {
 	response.Ok(c.C, res)
 }
 
-func (con *controller) PutTokenInfo(c *gin_context.InternalContext) {
+func (con *controller) PutTokenInfo(c *gin_context.NoSecurityContext) {
 	tokenRaw := c.C.Param("token")
 	if tokenRaw == "" {
 		response.Err(c.C, http_err.InvalidArgument)
@@ -80,7 +80,7 @@ func (con *controller) PutTokenInfo(c *gin_context.InternalContext) {
 	response.Ok(c.C, nil)
 }
 
-func (con *controller) DeleteToken(c *gin_context.InternalContext) {
+func (con *controller) DeleteToken(c *gin_context.NoSecurityContext) {
 	tokenRaw := c.C.Param("token")
 	if tokenRaw == "" {
 		response.Err(c.C, http_err.InvalidArgument)
@@ -95,7 +95,7 @@ func (con *controller) DeleteToken(c *gin_context.InternalContext) {
 
 	response.Ok(c.C, nil)
 }
-func (con *controller) CreateToken(c *gin_context.InternalContext) {
+func (con *controller) CreateToken(c *gin_context.NoSecurityContext) {
 	var body spec.PostAdmainTokenJSONRequestBody
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {
@@ -116,7 +116,7 @@ func (con *controller) CreateToken(c *gin_context.InternalContext) {
 	response.Ok(c.C, res)
 }
 
-func (con *controller) GetAllTokens(c *gin_context.InternalContext) {
+func (con *controller) GetAllTokens(c *gin_context.NoSecurityContext) {
 	tokens, err := con.service.ReadAllTokens()
 	if err != nil {
 		response.Err(c.C, err)
@@ -128,7 +128,7 @@ func (con *controller) GetAllTokens(c *gin_context.InternalContext) {
 	response.Ok(c.C, res)
 }
 
-func (con *controller) GetSelectTokens(c *gin_context.InternalContext) {
+func (con *controller) GetSelectTokens(c *gin_context.NoSecurityContext) {
 	var body spec.PostAdminAuthTokensJSONRequestBody
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {
@@ -143,7 +143,7 @@ func (con *controller) GetSelectTokens(c *gin_context.InternalContext) {
 	response.Ok(c.C, res)
 }
 
-func (con *controller) GetSudoToken(c *gin_context.InternalContext) {
+func (con *controller) GetSudoToken(c *gin_context.NoSecurityContext) {
 	var body spec.PostAdminSudoJSONRequestBody
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {
@@ -163,7 +163,7 @@ func (con *controller) GetSudoToken(c *gin_context.InternalContext) {
 	return
 }
 
-func (con *controller) GetTempToken(c *gin_context.InternalContext) {
+func (con *controller) GetTempToken(c *gin_context.NoSecurityContext) {
 
 }
 

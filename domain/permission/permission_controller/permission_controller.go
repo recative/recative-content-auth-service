@@ -11,12 +11,12 @@ import (
 )
 
 type Controller interface {
-	GetPermissionById(c *gin_context.InternalContext)
-	PutPermissionById(c *gin_context.InternalContext)
-	DeletePermissionById(c *gin_context.InternalContext)
-	CreatePermission(c *gin_context.InternalContext)
-	BatchGetPermission(c *gin_context.InternalContext)
-	GetAllPermissions(c *gin_context.InternalContext)
+	GetPermissionById(c *gin_context.NoSecurityContext)
+	PutPermissionById(c *gin_context.NoSecurityContext)
+	DeletePermissionById(c *gin_context.NoSecurityContext)
+	CreatePermission(c *gin_context.NoSecurityContext)
+	BatchGetPermission(c *gin_context.NoSecurityContext)
+	GetAllPermissions(c *gin_context.NoSecurityContext)
 }
 
 type controller struct {
@@ -31,7 +31,7 @@ func New(db *gorm.DB, service permission_service.Service) Controller {
 	}
 }
 
-func (con *controller) GetPermissionById(c *gin_context.InternalContext) {
+func (con *controller) GetPermissionById(c *gin_context.NoSecurityContext) {
 	permissionId := c.C.Param("permission_id")
 
 	permission, err := con.service.ReadPermissionById(permissionId)
@@ -45,7 +45,7 @@ func (con *controller) GetPermissionById(c *gin_context.InternalContext) {
 	response.Ok(c.C, res)
 }
 
-func (con *controller) PutPermissionById(c *gin_context.InternalContext) {
+func (con *controller) PutPermissionById(c *gin_context.NoSecurityContext) {
 	permissionId := c.C.Param("permission_id")
 
 	var body spec.PutAdminPermissionJSONRequestBody
@@ -66,7 +66,7 @@ func (con *controller) PutPermissionById(c *gin_context.InternalContext) {
 	response.Ok(c.C, nil)
 }
 
-func (con *controller) DeletePermissionById(c *gin_context.InternalContext) {
+func (con *controller) DeletePermissionById(c *gin_context.NoSecurityContext) {
 	permissionId := c.C.Param("permission_id")
 
 	_, err := con.service.DeletePermissionById(permissionId)
@@ -78,7 +78,7 @@ func (con *controller) DeletePermissionById(c *gin_context.InternalContext) {
 	response.Ok(c.C, nil)
 }
 
-func (con *controller) CreatePermission(c *gin_context.InternalContext) {
+func (con *controller) CreatePermission(c *gin_context.NoSecurityContext) {
 	var body spec.PostAdminPermissionJSONBody
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {
@@ -96,7 +96,7 @@ func (con *controller) CreatePermission(c *gin_context.InternalContext) {
 	response.Ok(c.C, nil)
 }
 
-func (con *controller) BatchGetPermission(c *gin_context.InternalContext) {
+func (con *controller) BatchGetPermission(c *gin_context.NoSecurityContext) {
 	var body spec.PostAdminPermissionsJSONRequestBody
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {
@@ -116,7 +116,7 @@ func (con *controller) BatchGetPermission(c *gin_context.InternalContext) {
 	return
 }
 
-func (con *controller) GetAllPermissions(c *gin_context.InternalContext) {
+func (con *controller) GetAllPermissions(c *gin_context.NoSecurityContext) {
 	permissions, err := con.service.ReadAllPermissions()
 	if err != nil {
 		response.Err(c.C, err)

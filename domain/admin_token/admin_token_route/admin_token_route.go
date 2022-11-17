@@ -7,13 +7,13 @@ import (
 )
 
 func Init(adminGroup *gin.RouterGroup, adminTokenController admin_token_controller.Controller) {
-	adminGroup.GET("/admin/token/:token", gin_context.InternalHandler(adminTokenController.GetInfoByToken))
-	adminGroup.PUT("/admin/token/:token", gin_context.InternalHandler(adminTokenController.PutTokenInfo))
-	adminGroup.DELETE("/admin/token/:token", gin_context.InternalHandler(adminTokenController.DeleteToken))
-	adminGroup.POST("/admin/token", gin_context.InternalHandler(adminTokenController.CreateToken))
-	adminGroup.GET("/admin/tokens", gin_context.InternalHandler(adminTokenController.GetAllTokens))
-	adminGroup.POST("/admin/tokens", gin_context.InternalHandler(adminTokenController.GetSelectTokens))
+	adminGroup.GET("/admin/token/:token", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.GetInfoByToken))
+	adminGroup.PUT("/admin/token/:token", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.PutTokenInfo))
+	adminGroup.DELETE("/admin/token/:token", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.DeleteToken))
+	adminGroup.POST("/admin/token", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.CreateToken))
+	adminGroup.GET("/admin/tokens", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.GetAllTokens))
+	adminGroup.POST("/admin/tokens", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.GetSelectTokens))
 
-	adminGroup.POST("/sudo", gin_context.InternalHandler(adminTokenController.GetSudoToken))
-	adminGroup.GET("/temp_user_token", gin_context.InternalHandler(adminTokenController.GetTempToken))
+	adminGroup.POST("/sudo", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.GetSudoToken))
+	adminGroup.GET("/temp_user_token", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission), gin_context.NoSecurityHandler(adminTokenController.GetTempToken))
 }

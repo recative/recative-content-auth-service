@@ -11,12 +11,12 @@ import (
 )
 
 type Controller interface {
-	GetStorageByKey(c *gin_context.InternalContext)
-	PutStorageByKey(c *gin_context.InternalContext)
-	DeleteStorageByKey(c *gin_context.InternalContext)
-	CreateStorage(c *gin_context.InternalContext)
-	BatchGetStorage(c *gin_context.InternalContext)
-	GetAllStorages(c *gin_context.InternalContext)
+	GetStorageByKey(c *gin_context.NoSecurityContext)
+	PutStorageByKey(c *gin_context.NoSecurityContext)
+	DeleteStorageByKey(c *gin_context.NoSecurityContext)
+	CreateStorage(c *gin_context.NoSecurityContext)
+	BatchGetStorage(c *gin_context.NoSecurityContext)
+	GetAllStorages(c *gin_context.NoSecurityContext)
 }
 
 type controller struct {
@@ -31,7 +31,7 @@ func New(db *gorm.DB, service storage_admin_service.Service) Controller {
 	}
 }
 
-func (con *controller) GetStorageByKey(c *gin_context.InternalContext) {
+func (con *controller) GetStorageByKey(c *gin_context.NoSecurityContext) {
 	storageKey := c.C.Param("storage_key")
 
 	storage, err := con.service.ReadStorageByKey(storageKey)
@@ -45,7 +45,7 @@ func (con *controller) GetStorageByKey(c *gin_context.InternalContext) {
 	response.Ok(c.C, res)
 }
 
-func (con *controller) PutStorageByKey(c *gin_context.InternalContext) {
+func (con *controller) PutStorageByKey(c *gin_context.NoSecurityContext) {
 	storageKey := c.C.Param("storage_key")
 
 	var body spec.PutAdminStorageIdJSONRequestBody
@@ -65,7 +65,7 @@ func (con *controller) PutStorageByKey(c *gin_context.InternalContext) {
 	response.Ok(c.C, nil)
 }
 
-func (con *controller) DeleteStorageByKey(c *gin_context.InternalContext) {
+func (con *controller) DeleteStorageByKey(c *gin_context.NoSecurityContext) {
 	storageKey := c.C.Param("storage_key")
 
 	_, err := con.service.DeleteStorageByKey(storageKey)
@@ -77,7 +77,7 @@ func (con *controller) DeleteStorageByKey(c *gin_context.InternalContext) {
 	response.Ok(c.C, nil)
 }
 
-func (con *controller) CreateStorage(c *gin_context.InternalContext) {
+func (con *controller) CreateStorage(c *gin_context.NoSecurityContext) {
 	var body spec.PostAdminStorageJSONRequestBody
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {
@@ -95,7 +95,7 @@ func (con *controller) CreateStorage(c *gin_context.InternalContext) {
 	response.Ok(c.C, nil)
 }
 
-func (con *controller) BatchGetStorage(c *gin_context.InternalContext) {
+func (con *controller) BatchGetStorage(c *gin_context.NoSecurityContext) {
 	var body spec.PostAdminStoragesJSONRequestBody
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {
@@ -115,7 +115,7 @@ func (con *controller) BatchGetStorage(c *gin_context.InternalContext) {
 	return
 }
 
-func (con *controller) GetAllStorages(c *gin_context.InternalContext) {
+func (con *controller) GetAllStorages(c *gin_context.NoSecurityContext) {
 	storages, err := con.service.ReadAllStorages()
 	if err != nil {
 		response.Err(c.C, err)

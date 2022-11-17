@@ -5,7 +5,9 @@ go 1.18
 require (
 	github.com/getkin/kin-openapi v0.103.0
 	github.com/gin-gonic/gin v1.8.1
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
+	github.com/lib/pq v1.10.2
 	github.com/recative/recative-backend-sdk v0.2.8
 	github.com/samber/lo v1.28.2
 	gorm.io/gorm v1.23.9
@@ -20,7 +22,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.0 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/invopop/yaml v0.1.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect

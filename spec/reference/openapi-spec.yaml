@@ -18,6 +18,15 @@ paths:
       security:
         - JWT-Authrization: []
       description: Normal user get all storage value by keys which embed in jwt authrization.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        description: ''
+      x-internal: false
   '/admin/storage/{storage_key}':
     parameters:
       - schema:
