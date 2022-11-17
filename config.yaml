@@ -1,6 +1,6 @@
 domain:
   storage_admin_service:
-    admin_authorization_token: "xxx"
+    root_token: "xxx"
 database:
   is_auto_migrate: false
   pgsql_uri: 'avc'

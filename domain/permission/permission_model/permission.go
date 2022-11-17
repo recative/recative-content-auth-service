@@ -9,6 +9,7 @@ type PermissionModel interface {
 	CreatePermission(params PermissionParams) error
 	ReadPermissionsByKeys(keys []string) ([]*Permission, error)
 	ReadAllPermissions() ([]*Permission, error)
+	IsPermissionsExist([]string) ([]string, bool)
 }
 
 type Permission struct {
@@ -78,4 +79,29 @@ func (m *model) ReadAllPermissions() ([]*Permission, error) {
 		return nil, db_err.Wrap(err)
 	}
 	return permissions, nil
+}
+
+func (m *model) IsPermissionsExist(permissionIds []string) (miss []string, ok bool) {
+	var permissions []*Permission
+	err := m.DB.Where("id IN ?", permissionIds).Find(&permissions).Error
+	if err != nil {
+		return nil, false
+	}
+	if len(permissions) != len(permissionIds) {
+		miss = make([]string, 0)
+		for _, permissionId := range permissionIds {
+			var found bool
+			for _, permission := range permissions {
+				if permission.Id == permissionId {
+					found = true
+					break
+				}
+			}
+			if !found {
+				miss = append(miss, permissionId)
+			}
+		}
+		return miss, false
+	}
+	return nil, true
 }

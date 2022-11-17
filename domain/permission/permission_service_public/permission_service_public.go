@@ -12,6 +12,7 @@ type Service interface {
 	CreatePermission(params permission_model.PermissionParams) error
 	ReadPermissionsByKeys(keys []string) ([]*permission_model.Permission, error)
 	ReadAllPermissions() ([]*permission_model.Permission, error)
+	IsPermissionsExist([]string) ([]string, bool)
 }
 
 type service struct {
@@ -48,4 +49,8 @@ func (s *service) ReadPermissionsByKeys(keys []string) ([]*permission_model.Perm
 
 func (s *service) ReadAllPermissions() ([]*permission_model.Permission, error) {
 	return s.model.ReadAllPermissions()
+}
+
+func (s *service) IsPermissionsExist(permissionIds []string) ([]string, bool) {
+	return s.model.IsPermissionsExist(permissionIds)
 }

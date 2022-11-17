@@ -1,7 +1,7 @@
 package domain
 
-import "github.com/recative/recative-backend/definition"
+import "github.com/recative/recative-backend/domain/admin_token/admin_token_config"
 
 type Config struct {
-	CrossMicroServiceConfig definition.CrossServiceConfig `mapstructure:"cross_micro_service"`
+	AdminTokenConfig admin_token_config.Config
 }

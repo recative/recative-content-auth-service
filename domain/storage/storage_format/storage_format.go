@@ -39,16 +39,11 @@ func RequestStorageToStorageParam(req spec.StorageRequest) storage_model.Storage
 		needPermission = *req.NeedPermissions
 	}
 
-	var value string
-	if req.Value != nil {
-		value = *req.Value
-	}
-
 	return storage_model.StorageParams{
 		Comment:             comment,
 		Key:                 req.Key,
 		NeedPermissionCount: needPermissionCount,
 		NeedPermissions:     needPermission,
-		Value:               value,
+		Value:               req.Value,
 	}
 }

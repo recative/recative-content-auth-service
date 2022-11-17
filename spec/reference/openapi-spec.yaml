@@ -14,7 +14,7 @@ paths:
       operationId: post-app-storage
       responses:
         '200':
-          $ref: '#/components/responses/storageSimpleResponse'
+          $ref: '#/components/responses/storagesSimpleResponse'
       security:
         - JWT-Authrization: []
       description: Normal user get all storage value by keys which embed in jwt authrization.
@@ -103,7 +103,9 @@ paths:
       description: Admin get storages by keys.
       x-internal: true
     parameters: []
-    get:
+  /admin/storages/query:
+    parameters: []
+    post:
       summary: Admin get storages by query params
       operationId: get-admin-storages
       responses:
@@ -210,7 +212,26 @@ paths:
       description: Admin create permission.
       x-internal: true
   /admin/permissions:
-    get:
+    post:
+      summary: Admin get permission by permission id
+      operationId: post-admin-permissions
+      responses:
+        '200':
+          description: OK
+      security:
+        - X-InternalAuthorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              description: array of permission id
+              items:
+                type: string
+      description: Admin get permission by permission id.
+      x-internal: true
+  /admin/permissions/query:
+    post:
       summary: Admin get permission by query params
       tags: []
       responses:
@@ -234,24 +255,7 @@ paths:
         `regex` key in request body is a regex express, will return all permissions fit this regex expresss. 
         if request body is empty, will return all permissions.
       x-internal: true
-    post:
-      summary: Admin get permission by permission id
-      operationId: post-admin-permissions
-      responses:
-        '200':
-          description: OK
-      security:
-        - X-InternalAuthorization: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              description: array of permission id
-              items:
-                type: string
-      description: Admin get permission by permission id.
-      x-internal: true
+    parameters: []
   '/admin/token/{token}':
     parameters:
       - schema:
@@ -294,7 +298,7 @@ paths:
         - X-InternalAuthorization: []
       x-internal: true
       description: Admin get token info.
-  /admain/token:
+  /admin/token:
     post:
       summary: Admin create new token
       operationId: post-admain-token
@@ -469,17 +473,19 @@ components:
       x-stoplight:
         id: xkj945hqugj19
       type: object
+      description: 'if `token` in request is empty, it will generate by backend'
       properties:
-        token:
-          type: string
         admin_permission:
           type: array
           items:
             $ref: '#/components/schemas/AdminPermission'
         comment:
           type: string
+        token:
+          type: string
+        expired_at:
+          type: string
       required:
-        - token
         - admin_permission
     TokenResponse:
       title: TokenResponse
@@ -494,6 +500,8 @@ components:
           items:
             type: string
         comment:
+          type: string
+        expired_at:
           type: string
       required:
         - token

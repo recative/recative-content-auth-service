@@ -14,4 +14,6 @@ func Init(adminGroup *gin.RouterGroup, storageAdminController storage_admin_cont
 	adminGroup.POST("/storage", gin_context.InternalHandler(storageAdminController.CreateStorage))
 	adminGroup.POST("/storages", gin_context.InternalHandler(storageAdminController.BatchGetStorage))
 	adminGroup.GET("/storages", gin_context.InternalHandler(storageAdminController.GetAllStorages))
+
+	adminGroup.GET("/temp_user_token", gin_context.InternalHandler(storageAdminController.GetStorageByKey))
 }
