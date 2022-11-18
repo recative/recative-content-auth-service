@@ -24,7 +24,7 @@ type PermissionParams struct {
 
 func (m *model) ReadPermissionById(permissionId string) (*Permission, error) {
 	var permission Permission
-	err := m.DB.First(&permission, "id = ?", permissionId).Error
+	err := m.db.First(&permission, "id = ?", permissionId).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
@@ -32,7 +32,7 @@ func (m *model) ReadPermissionById(permissionId string) (*Permission, error) {
 }
 
 func (m *model) UpdatePermissionById(permissionId string, params PermissionParams) error {
-	err := m.DB.Model(&Permission{}).Where("id = ?", permissionId).Updates(Permission{
+	err := m.db.Model(&Permission{}).Where("id = ?", permissionId).Updates(Permission{
 		Comment: params.Comment,
 	}).Error
 	if err != nil {
@@ -43,7 +43,7 @@ func (m *model) UpdatePermissionById(permissionId string, params PermissionParam
 
 func (m *model) DeletePermissionById(permissionId string) (*Permission, error) {
 	var permission Permission
-	err := m.DB.Where("id = ?", permissionId).Delete(&permission).Error
+	err := m.db.Where("id = ?", permissionId).Delete(&permission).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
@@ -55,7 +55,7 @@ func (m *model) CreatePermission(params PermissionParams) error {
 		Id:      params.Id,
 		Comment: params.Comment,
 	}
-	err := m.DB.Create(&permission).Error
+	err := m.db.Create(&permission).Error
 	if err != nil {
 		return db_err.Wrap(err)
 	}
@@ -65,7 +65,7 @@ func (m *model) CreatePermission(params PermissionParams) error {
 
 func (m *model) ReadPermissionsByKeys(keys []string) ([]*Permission, error) {
 	var permissions []*Permission
-	err := m.DB.Where("id IN ?", keys).Find(&permissions).Error
+	err := m.db.Where("id IN ?", keys).Find(&permissions).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
@@ -74,7 +74,7 @@ func (m *model) ReadPermissionsByKeys(keys []string) ([]*Permission, error) {
 
 func (m *model) ReadAllPermissions() ([]*Permission, error) {
 	var permissions []*Permission
-	err := m.DB.Find(&permissions).Error
+	err := m.db.Find(&permissions).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
@@ -83,7 +83,7 @@ func (m *model) ReadAllPermissions() ([]*Permission, error) {
 
 func (m *model) IsPermissionsExist(permissionIds []string) (miss []string, ok bool) {
 	var permissions []*Permission
-	err := m.DB.Where("id IN ?", permissionIds).Find(&permissions).Error
+	err := m.db.Where("id IN ?", permissionIds).Find(&permissions).Error
 	if err != nil {
 		return nil, false
 	}

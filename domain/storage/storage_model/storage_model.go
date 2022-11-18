@@ -1,13 +1,29 @@
 package storage_model
 
-import "gorm.io/gorm"
+import (
+	"github.com/recative/recative-backend-sdk/pkg/db"
+	"github.com/recative/recative-backend-sdk/pkg/logger"
+	"go.uber.org/zap"
+	"gorm.io/gorm"
+)
 
 type Model interface {
 	StorageModel
+	db.AutoMigrater
 }
 
 type model struct {
-	*gorm.DB
+	db *gorm.DB
+}
+
+func (m *model) AutoMigrate() {
+	err := m.db.AutoMigrate(
+		&Storage{},
+	)
+
+	if err != nil {
+		logger.Fatal("storage model auto migrate error", zap.Error(err))
+	}
 }
 
 func New(db *gorm.DB) Model {

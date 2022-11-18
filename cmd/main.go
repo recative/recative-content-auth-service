@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/recative/recative-backend-sdk/pkg/auth"
 	"github.com/recative/recative-backend-sdk/pkg/config"
+	"github.com/recative/recative-backend-sdk/pkg/db"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine"
 	"github.com/recative/recative-backend/domain"
-	"gorm.io/gorm"
 	//"github.com/recative/recative-backend-sdk/pkg"
 )
 
@@ -18,10 +18,9 @@ func main() {
 	var domainConfig domain.Config
 	config.ForceParseByKey("domain", &domainConfig)
 
-	//var dbConfig db.Config
-	//config.ForceParseByKey("database", &dbConfig)
-	//db := db.New(dbConfig)
-	var db *gorm.DB
+	var dbConfig db.Config
+	config.ForceParseByKey("database", &dbConfig)
+	db := db.New(dbConfig)
 
 	var httpEngineConfig http_engine.Config
 	config.ForceParseByKey("http_engine", &httpEngineConfig)

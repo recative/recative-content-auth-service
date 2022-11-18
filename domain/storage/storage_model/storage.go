@@ -45,7 +45,7 @@ func (m *model) CreateStorage(storageParams StorageParams) error {
 	storage := Storage{
 		StorageParams: storageParams,
 	}
-	err := m.DB.Create(&storage).Error
+	err := m.db.Create(&storage).Error
 	if err != nil {
 		return db_err.Wrap(err)
 	}
@@ -53,7 +53,7 @@ func (m *model) CreateStorage(storageParams StorageParams) error {
 }
 
 func (m *model) UpdateStorageByKey(key string, storageParams StorageParams) error {
-	err := m.DB.Where("key = ?", key).Updates(Storage{StorageParams: storageParams}).Error
+	err := m.db.Where("key = ?", key).Updates(Storage{StorageParams: storageParams}).Error
 	if err != nil {
 		return db_err.Wrap(err)
 	}
@@ -62,7 +62,7 @@ func (m *model) UpdateStorageByKey(key string, storageParams StorageParams) erro
 
 func (m *model) ReadStorageByKey(key string) (*Storage, error) {
 	var storage Storage
-	err := m.DB.Where("key = ?", key).First(&storage).Error
+	err := m.db.Where("key = ?", key).First(&storage).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
@@ -71,7 +71,7 @@ func (m *model) ReadStorageByKey(key string) (*Storage, error) {
 
 func (m *model) ReadStorageByKeys(key []string) ([]*Storage, error) {
 	var storages []*Storage
-	err := m.DB.Where("key IN ?", key).Find(&storages).Error
+	err := m.db.Where("key IN ?", key).Find(&storages).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
@@ -80,7 +80,7 @@ func (m *model) ReadStorageByKeys(key []string) ([]*Storage, error) {
 
 func (m *model) ReadAllStorage() ([]*Storage, error) {
 	var storages []*Storage
-	err := m.DB.Find(&storages).Error
+	err := m.db.Find(&storages).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
@@ -89,7 +89,7 @@ func (m *model) ReadAllStorage() ([]*Storage, error) {
 
 func (m *model) DeleteStorageByKey(key string) (*Storage, error) {
 	var storage Storage
-	err := m.DB.Where("key = ?", key).Delete(&storage).Error
+	err := m.db.Where("key = ?", key).Delete(&storage).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
@@ -98,7 +98,7 @@ func (m *model) DeleteStorageByKey(key string) (*Storage, error) {
 
 func (m *model) IsExistStorageByKey(key string) (bool, error) {
 	var storage Storage
-	err := m.DB.Where("key = ?", key).First(&storage).Error
+	err := m.db.Where("key = ?", key).First(&storage).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return false, nil

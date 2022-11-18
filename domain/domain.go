@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"github.com/recative/recative-backend-sdk/pkg/auth"
+	"github.com/recative/recative-backend-sdk/pkg/db"
 	"github.com/recative/recative-backend-sdk/pkg/gin_context"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine/http_err"
@@ -19,6 +20,7 @@ type Dependence struct {
 	Db         *gorm.DB
 	HttpEngine *http_engine.CustomHttpEngine
 	Auther     auth.Authable
+	DbConfig   db.Config
 }
 
 func Init(dep *Dependence, config Config) {
@@ -51,6 +53,7 @@ func Init(dep *Dependence, config Config) {
 		storage.Init(&storage.Dependence{
 			Db:       dep.Db,
 			AppGroup: appGroup,
+			DbConfig: dep.DbConfig,
 		})
 
 		storage_admin.Init(&storage_admin.Dependence{
@@ -61,12 +64,14 @@ func Init(dep *Dependence, config Config) {
 		permission.Init(&permission.Dependence{
 			Db:         dep.Db,
 			AdminGroup: adminGroup,
+			DbConfig:   dep.DbConfig,
 		})
 
 		admin_token.Init(&admin_token.Dependence{
 			Db:         dep.Db,
 			AdminGroup: adminGroup,
 			Config:     config.AdminTokenConfig,
+			DbConfig:   dep.DbConfig,
 		})
 	}
 }
