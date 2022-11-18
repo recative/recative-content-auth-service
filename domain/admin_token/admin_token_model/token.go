@@ -29,8 +29,8 @@ type Token struct {
 }
 
 type TokenParam struct {
-	Raw             string `gorm:"unique;index"`
-	AdminPermission pq.StringArray
+	Raw             string         `gorm:"unique;index"`
+	AdminPermission pq.StringArray `gorm:"type:varchar[]"`
 	Comment         string
 	ExpiredAt       time.Time
 }

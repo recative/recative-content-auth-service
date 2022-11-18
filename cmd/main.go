@@ -35,6 +35,7 @@ func main() {
 		Db:         db,
 		HttpEngine: httpEngine,
 		Auther:     auther,
+		DbConfig:   dbConfig,
 	}, domainConfig)
 
 	err = httpEngine.Run(httpEngineConfig.ListenAddr)

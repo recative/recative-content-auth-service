@@ -2,6 +2,7 @@ package storage_model
 
 import (
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	"github.com/recative/recative-backend-sdk/pkg/db/db_err"
 	"gorm.io/gorm"
 	"time"
@@ -24,13 +25,13 @@ type Storage struct {
 
 	StorageId string `gorm:"primaryKey;not null;uniqueIndex"`
 
-	StorageParams
+	StorageParams `gorm:"embedded"`
 }
 
 type StorageParams struct {
 	Key                 string `gorm:"not null;uniqueIndex"`
 	Value               string
-	NeedPermissions     []string
+	NeedPermissions     pq.StringArray `gorm:"type:varchar[]"`
 	NeedPermissionCount int
 
 	Comment string
