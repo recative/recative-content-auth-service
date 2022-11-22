@@ -301,8 +301,8 @@ paths:
       summary: Admin get token info
       operationId: get-admin-token
       responses:
-        '204':
-          description: No Content
+        '200':
+          $ref: '#/components/responses/tokenResponse'
       security:
         - X-InternalAuthorization: []
       x-internal: true
