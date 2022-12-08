@@ -8,6 +8,7 @@ import (
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_format"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_service"
 	"github.com/recative/recative-backend/spec"
+	"github.com/samber/lo"
 	"gorm.io/gorm"
 )
 
@@ -20,7 +21,7 @@ type Controller interface {
 	GetSelectTokens(c *gin_context.NoSecurityContext)
 	GetSudoToken(c *gin_context.NoSecurityContext)
 	GetTempToken(c *gin_context.NoSecurityContext)
-	CheckAdminTokenPermission(c *gin_context.NoSecurityContext)
+	CheckAdminTokenPermission(needPermissions ...string) func(c *gin_context.NoSecurityContext)
 }
 
 type controller struct {
@@ -167,16 +168,24 @@ func (con *controller) GetTempToken(c *gin_context.NoSecurityContext) {
 
 }
 
-func (con *controller) CheckAdminTokenPermission(c *gin_context.NoSecurityContext) {
-	internalAuthorizationToken := c.C.GetHeader("X-InternalAuthorization")
-	if con.service.IsSudoTokenValid(internalAuthorizationToken) {
-		return
+func (con *controller) CheckAdminTokenPermission(needPermissions ...string) func(c *gin_context.NoSecurityContext) {
+	return func(c *gin_context.NoSecurityContext) {
+		internalAuthorizationToken := c.C.GetHeader("X-InternalAuthorization")
+		if con.service.IsSudoTokenValid(internalAuthorizationToken) {
+			return
+		}
+		ok := con.service.IsTokenExist(internalAuthorizationToken)
+		if !ok {
+			response.Err(c.C, http_err.Unauthorized)
+			return
+		}
+		token, err := con.service.ReadTokenInfo(internalAuthorizationToken)
+		if err != nil {
+			response.Err(c.C, err)
+			return
+		}
+		if !lo.Every(token.AdminPermission, needPermissions) {
+			response.Err(c.C, http_err.Forbidden.New("permission denied"))
+		}
 	}
-	ok := con.service.IsTokenExist(internalAuthorizationToken)
-	if ok {
-		return
-	}
-	response.Err(c.C, http_err.Unauthorized)
-	c.C.Abort()
-	return
 }

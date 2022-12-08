@@ -112,11 +112,17 @@ paths:
       description: Admin get storages by keys.
       x-internal: true
     parameters: []
+    get:
+      summary: ''
+      operationId: get-admin-storages
+      responses:
+        '200':
+          description: OK
   /admin/storages/query:
     parameters: []
     post:
       summary: Admin get storages by query params
-      operationId: get-admin-storages
+      operationId: post-admin-storages-query
       responses:
         '200':
           $ref: '#/components/responses/storagesResponse'
@@ -528,7 +534,7 @@ components:
       enum:
         - read
         - write
-      description: ''
+        - sudo
     RawTokenResponse:
       title: RawTokenResponse
       x-stoplight:
