@@ -169,7 +169,7 @@ func (con *controller) GetTempToken(c *gin_context.NoSecurityContext) {
 
 func (con *controller) CheckAdminTokenPermission(c *gin_context.NoSecurityContext) {
 	internalAuthorizationToken := c.C.GetHeader("X-InternalAuthorization")
-	if internalAuthorizationToken == admin_token_service.SudoToken {
+	if con.service.IsSudoTokenValid(internalAuthorizationToken) {
 		return
 	}
 	ok := con.service.IsTokenExist(internalAuthorizationToken)

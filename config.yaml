@@ -2,7 +2,7 @@ domain:
   storage_admin_service:
     root_token: "xxx"
 database:
-  is_auto_migrate: true
+  is_auto_migrate: false
   pgsql_uri: postgres://docker:docker@127.0.0.1:5432/auth_service_test
   pgsql_max_idle: 5
   pgsql_max_open: 10

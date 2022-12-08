@@ -8,8 +8,10 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/lib/pq v1.10.2
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/recative/recative-backend-sdk v0.2.8
 	github.com/samber/lo v1.28.2
+	go.uber.org/zap v1.23.0
 	gorm.io/gorm v1.23.9
 )
 
@@ -54,7 +56,6 @@ require (
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
-	go.uber.org/zap v1.23.0 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2 // indirect
