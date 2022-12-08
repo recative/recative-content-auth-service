@@ -494,6 +494,8 @@ components:
           type: string
         expired_at:
           type: string
+        is_valid:
+          type: boolean
       required:
         - admin_permission
     TokenResponse:
@@ -512,6 +514,8 @@ components:
           type: string
         expired_at:
           type: string
+        is_valid:
+          type: boolean
       required:
         - token
         - admin_permission
