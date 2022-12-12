@@ -29,7 +29,7 @@ func Init(dep *Dependence) {
 
 	service := permission_service.New(publicService)
 
-	controller := permission_controller.New(dep.Db, service, dep.AdminTokenController)
+	controller := permission_controller.New(dep.Db, service)
 
-	permission_route.Init(dep.AdminGroup, controller)
+	permission_route.Init(dep.AdminGroup, controller, dep.AdminTokenController)
 }

@@ -21,16 +21,14 @@ type Controller interface {
 }
 
 type controller struct {
-	db                   *gorm.DB
-	service              storage_admin_service.Service
-	adminTokenController admin_token_controller.Controller
+	db      *gorm.DB
+	service storage_admin_service.Service
 }
 
 func New(db *gorm.DB, service storage_admin_service.Service, adminTokenController admin_token_controller.Controller) Controller {
 	return &controller{
-		db:                   db,
-		service:              service,
-		adminTokenController: adminTokenController,
+		db:      db,
+		service: service,
 	}
 }
 

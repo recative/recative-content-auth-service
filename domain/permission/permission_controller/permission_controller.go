@@ -1,7 +1,6 @@
 package permission_controller
 
 import (
-	"github.com/recative/recative-backend/domain/admin_token/admin_token_controller"
 	"github.com/recative/recative-backend/domain/permission/permission_format"
 	"github.com/recative/recative-backend/domain/permission/permission_service"
 	"github.com/recative/recative-backend/spec"
@@ -21,16 +20,14 @@ type Controller interface {
 }
 
 type controller struct {
-	db                   *gorm.DB
-	service              permission_service.Service
-	adminTokenController admin_token_controller.Controller
+	db      *gorm.DB
+	service permission_service.Service
 }
 
-func New(db *gorm.DB, service permission_service.Service, adminTokenController admin_token_controller.Controller) Controller {
+func New(db *gorm.DB, service permission_service.Service) Controller {
 	return &controller{
-		db:                   db,
-		service:              service,
-		adminTokenController: adminTokenController,
+		db:      db,
+		service: service,
 	}
 }
 
