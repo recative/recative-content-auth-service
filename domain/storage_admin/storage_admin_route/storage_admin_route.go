@@ -40,4 +40,9 @@ func Init(
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
 		gin_context.NoSecurityHandler(storageAdminController.GetAllStorages),
 	)
+
+	adminGroup.POST("/storages/query",
+		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
+		gin_context.NoSecurityHandler(storageAdminController.GetAllStorages),
+	)
 }

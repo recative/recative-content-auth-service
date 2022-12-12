@@ -245,6 +245,14 @@ paths:
                 type: string
       description: Admin get permission by permission id.
       x-internal: true
+    get:
+      summary: Get all permissions
+      operationId: get-admin-permissions
+      responses:
+        '200':
+          $ref: '#/components/responses/permissionsResponse'
+      security:
+        - X-InternalAuthorization: []
   /admin/permissions/query:
     post:
       summary: Admin get permission by query params

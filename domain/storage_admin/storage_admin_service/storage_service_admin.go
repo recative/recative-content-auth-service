@@ -14,6 +14,7 @@ type Service interface {
 	CreateStorage(storageParams storage_model.StorageParams) error
 	ReadStoragesByKeys(keys []string) ([]*storage_model.Storage, error)
 	ReadAllStorages() ([]*storage_model.Storage, error)
+	ReadStoragesByQuery(excludePermission, includePermission []string) ([]*storage_model.Storage, error)
 }
 
 type service struct {
@@ -52,4 +53,8 @@ func (s *service) ReadStoragesByKeys(keys []string) ([]*storage_model.Storage, e
 
 func (s *service) ReadAllStorages() ([]*storage_model.Storage, error) {
 	return s.model.ReadAllStorage()
+}
+
+func (s *service) ReadStoragesByQuery(excludePermission, includePermission []string) ([]*storage_model.Storage, error) {
+	return s.model.ReadStoragesByQuery(excludePermission, includePermission)
 }

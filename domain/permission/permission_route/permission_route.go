@@ -16,6 +16,7 @@ func Init(adminGroup *gin.RouterGroup, permissionController permission_controlle
 	adminGroup.DELETE("/permission/:permission_id", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()), gin_context.NoSecurityHandler(permissionController.DeletePermissionById))
 	adminGroup.POST("/permission", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()), gin_context.NoSecurityHandler(permissionController.CreatePermission))
 
-	adminGroup.POST("/permissions", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()), gin_context.NoSecurityHandler(permissionController.GetAllPermissions))
+	adminGroup.GET("/permissions", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()), gin_context.NoSecurityHandler(permissionController.GetAllPermissions))
+	adminGroup.POST("/permissions", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()), gin_context.NoSecurityHandler(permissionController.BatchGetPermission))
 	adminGroup.POST("/permissions/query", gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()), gin_context.NoSecurityHandler(permissionController.BatchGetPermission))
 }

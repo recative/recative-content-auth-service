@@ -17,6 +17,7 @@ type Controller interface {
 	CreatePermission(c *gin_context.NoSecurityContext)
 	BatchGetPermission(c *gin_context.NoSecurityContext)
 	GetAllPermissions(c *gin_context.NoSecurityContext)
+	PostGetPermissionsByQuery(c *gin_context.NoSecurityContext)
 }
 
 type controller struct {
@@ -127,4 +128,8 @@ func (con *controller) GetAllPermissions(c *gin_context.NoSecurityContext) {
 	res = permission_format.PermissionsToResponse(permissions)
 	response.Ok(c.C, res)
 	return
+}
+
+func (con *controller) PostGetPermissionsByQuery(c *gin_context.NoSecurityContext) {
+
 }

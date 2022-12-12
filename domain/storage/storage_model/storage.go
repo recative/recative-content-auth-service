@@ -16,6 +16,7 @@ type StorageModel interface {
 	ReadAllStorage() ([]*Storage, error)
 	DeleteStorageByKey(key string) (*Storage, error)
 	IsExistStorageByKey(key string) (bool, error)
+	ReadStoragesByQuery(excludePermission, includePermission []string) ([]*Storage, error)
 }
 
 type Storage struct {
@@ -107,4 +108,13 @@ func (m *model) IsExistStorageByKey(key string) (bool, error) {
 		return false, db_err.Wrap(err)
 	}
 	return true, nil
+}
+
+func (m *model) ReadStoragesByQuery(excludePermission, includePermission []string) ([]*Storage, error) {
+	var storages []*Storage
+	err := m.db.Where("need_permissions && ?", pq.StringArray(excludePermission)).Not("need_permissions && ?", pq.StringArray(includePermission)).Find(&storages).Error
+	if err != nil {
+		return nil, db_err.Wrap(err)
+	}
+	return storages, nil
 }

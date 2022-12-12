@@ -1,7 +1,6 @@
 package storage_admin_controller
 
 import (
-	"github.com/recative/recative-backend/domain/admin_token/admin_token_controller"
 	"github.com/recative/recative-backend/domain/storage/storage_format"
 	"github.com/recative/recative-backend/domain/storage_admin/storage_admin_service"
 	"github.com/recative/recative-backend/spec"
@@ -18,6 +17,7 @@ type Controller interface {
 	CreateStorage(c *gin_context.NoSecurityContext)
 	BatchGetStorage(c *gin_context.NoSecurityContext)
 	GetAllStorages(c *gin_context.NoSecurityContext)
+	PostStoragesByQuery(c *gin_context.NoSecurityContext)
 }
 
 type controller struct {
@@ -25,7 +25,9 @@ type controller struct {
 	service storage_admin_service.Service
 }
 
-func New(db *gorm.DB, service storage_admin_service.Service, adminTokenController admin_token_controller.Controller) Controller {
+var _ Controller = &controller{}
+
+func New(db *gorm.DB, service storage_admin_service.Service) Controller {
 	return &controller{
 		db:      db,
 		service: service,
@@ -118,6 +120,26 @@ func (con *controller) BatchGetStorage(c *gin_context.NoSecurityContext) {
 
 func (con *controller) GetAllStorages(c *gin_context.NoSecurityContext) {
 	storages, err := con.service.ReadAllStorages()
+	if err != nil {
+		response.Err(c.C, err)
+		return
+	}
+
+	var res []spec.StorageResponse
+	res = storage_format.StoragesToResponse(storages)
+	response.Ok(c.C, res)
+	return
+}
+
+func (con *controller) PostStoragesByQuery(c *gin_context.NoSecurityContext) {
+	var body spec.PostAdminStoragesQueryJSONBody
+	err := c.C.ShouldBindQuery(&body)
+	if err != nil {
+		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
+		return
+	}
+
+	storages, err := con.service.ReadStoragesByQuery(*body.IncludePermission, *body.ExcludePermission)
 	if err != nil {
 		response.Err(c.C, err)
 		return
