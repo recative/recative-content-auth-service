@@ -59,7 +59,7 @@ func (con *controller) GetInfoByToken(c *gin_context.NoSecurityContext) {
 func (con *controller) PutTokenInfo(c *gin_context.NoSecurityContext) {
 	tokenRaw := c.C.Param("token")
 	if tokenRaw == "" {
-		response.Err(c.C, http_err.InvalidArgument)
+		response.Err(c.C, http_err.InvalidArgument.New())
 		return
 	}
 

@@ -30,7 +30,7 @@ type Token struct {
 }
 
 func (t *Token) IsValid() bool {
-	return t.ExpiredAt.After(time.Now())
+	return t.TokenParam.IsValid && t.ExpiredAt.After(time.Now())
 }
 
 type TokenType string
