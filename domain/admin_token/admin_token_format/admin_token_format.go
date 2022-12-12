@@ -47,6 +47,7 @@ func TokenRequestToTokenParam(req spec.TokenRequest) admin_token_model.TokenPara
 		AdminPermission: AdminPermissionArrayToStringArray(req.AdminPermission),
 		Comment:         comment,
 		ExpiredAt:       expiredAt,
+		IsValid:         *req.IsValid,
 	}
 }
 
