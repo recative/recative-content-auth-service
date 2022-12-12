@@ -29,6 +29,10 @@ type Token struct {
 	TokenParam
 }
 
+func (t *Token) IsValid() bool {
+	return t.ExpiredAt.After(time.Now())
+}
+
 type TokenType string
 
 const (

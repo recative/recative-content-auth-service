@@ -3,6 +3,7 @@ package admin_token_format
 import (
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_model"
 	"github.com/recative/recative-backend/spec"
+	"github.com/recative/recative-service-sdk/util/ref"
 	"time"
 )
 
@@ -10,7 +11,10 @@ func TokenToResponse(token *admin_token_model.Token) spec.TokenResponse {
 	return spec.TokenResponse{
 		AdminPermission: token.AdminPermission,
 		Comment:         token.Comment,
+		ExpiredAt:       ref.T(token.ExpiredAt.Format(time.RFC3339)),
+		IsValid:         ref.T(token.IsValid()),
 		Token:           token.Raw,
+		Type:            spec.TokenResponseType(token.Type),
 	}
 }
 
