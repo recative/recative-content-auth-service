@@ -1,13 +1,13 @@
 package admin_token_controller
 
 import (
-	"github.com/recative/recative-backend-sdk/pkg/gin_context"
-	"github.com/recative/recative-backend-sdk/pkg/http_engine/http_err"
-	"github.com/recative/recative-backend-sdk/pkg/http_engine/response"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_config"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_format"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_service"
 	"github.com/recative/recative-backend/spec"
+	"github.com/recative/recative-service-sdk/pkg/gin_context"
+	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
+	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
 )
@@ -184,8 +184,14 @@ func (con *controller) CheckAdminTokenPermission(needPermissions ...string) func
 			response.Err(c.C, err)
 			return
 		}
-		if !lo.Every(token.AdminPermission, needPermissions) {
-			response.Err(c.C, http_err.Forbidden.New("permission denied"))
+
+		for _, permission := range needPermissions {
+			if lo.Contains(token.AdminPermission, permission) {
+				return
+			}
 		}
+
+		response.Err(c.C, http_err.Forbidden.New("permission denied"))
+		return
 	}
 }

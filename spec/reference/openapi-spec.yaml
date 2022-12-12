@@ -522,10 +522,16 @@ components:
           type: string
         is_valid:
           type: boolean
+        type:
+          type: string
+          enum:
+            - sudo
+            - admin
       required:
         - token
         - admin_permission
         - comment
+        - type
     AdminPermission:
       type: string
       title: AdminPermission

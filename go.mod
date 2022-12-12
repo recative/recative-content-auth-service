@@ -1,6 +1,6 @@
 module github.com/recative/recative-backend
 
-go 1.18
+go 1.19
 
 require (
 	github.com/getkin/kin-openapi v0.103.0
@@ -9,7 +9,6 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/lib/pq v1.10.2
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/recative/recative-backend-sdk v0.2.8
 	github.com/samber/lo v1.28.2
 	go.uber.org/zap v1.23.0
 	gorm.io/gorm v1.23.9
@@ -47,6 +46,8 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
+	github.com/recative/recative-backend-sdk v0.3.1 // indirect
+	github.com/recative/recative-service-sdk v0.3.0 // indirect
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect

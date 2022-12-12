@@ -5,6 +5,8 @@ import (
 	"github.com/patrickmn/go-cache"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_model"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_service_public"
+	"github.com/recative/recative-service-sdk/util/ref"
+	"github.com/samber/lo"
 	"gorm.io/gorm"
 	"time"
 )
@@ -39,6 +41,9 @@ func New(db *gorm.DB, model admin_token_model.Model, publicService admin_token_s
 }
 
 func (s *service) ReadTokenInfo(tokenRaw string) (*admin_token_model.Token, error) {
+	if s.IsSudoTokenValid(tokenRaw) {
+		return ref.T(s.model.GenerateSudoToken(tokenRaw)), nil
+	}
 	return s.model.ReadTokenInfoByRaw(tokenRaw)
 }
 
@@ -59,7 +64,18 @@ func (s *service) ReadAllTokens() (token []admin_token_model.Token, err error) {
 }
 
 func (s *service) ReadSelectTokens(tokenRaws []string) (token []admin_token_model.Token, err error) {
-	return s.model.ReadSelectTokens(tokenRaws)
+	var res = make([]admin_token_model.Token, 0, len(tokenRaws))
+	sudoToken, isExist := s.GetSudoToken()
+	if isExist && lo.Contains(tokenRaws, sudoToken) {
+		res = append(res, s.model.GenerateSudoToken(sudoToken))
+	}
+	tokens, err := s.model.ReadSelectTokens(tokenRaws)
+	if err != nil {
+		return nil, err
+	}
+
+	res = append(res, tokens...)
+	return res, nil
 }
 
 const SudoToken = "sudo-token"
@@ -80,6 +96,14 @@ func (s *service) IsSudoTokenValid(token string) bool {
 		return sudoToken.(string) == token
 	}
 	return false
+}
+
+func (s *service) GetSudoToken() (sudoToken string, isExist bool) {
+	sudoTokenInterface, isExist := s.cache.Get(SudoToken)
+	if isExist {
+		return sudoTokenInterface.(string), true
+	}
+	return "", false
 }
 
 func (s *service) IsTokenExist(token string) bool {

@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/recative/recative-backend-sdk/pkg/auth"
-	"github.com/recative/recative-backend-sdk/pkg/config"
-	"github.com/recative/recative-backend-sdk/pkg/db"
-	"github.com/recative/recative-backend-sdk/pkg/http_engine"
 	"github.com/recative/recative-backend/domain"
-	//"github.com/recative/recative-backend-sdk/pkg"
+	"github.com/recative/recative-service-sdk/pkg/auth"
+	"github.com/recative/recative-service-sdk/pkg/config"
+	"github.com/recative/recative-service-sdk/pkg/db"
+	"github.com/recative/recative-service-sdk/pkg/http_engine"
+	//"github.com/recative/recative-service-sdk/pkg"
 )
 
 func main() {

@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"github.com/recative/recative-backend-sdk/pkg/auth"
-	"github.com/recative/recative-backend-sdk/pkg/db"
-	"github.com/recative/recative-backend-sdk/pkg/gin_context"
-	"github.com/recative/recative-backend-sdk/pkg/http_engine"
-	"github.com/recative/recative-backend-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-backend/domain/admin_token"
 	"github.com/recative/recative-backend/domain/permission"
 	"github.com/recative/recative-backend/domain/storage"
 	"github.com/recative/recative-backend/domain/storage_admin"
+	"github.com/recative/recative-service-sdk/pkg/auth"
+	"github.com/recative/recative-service-sdk/pkg/db"
+	"github.com/recative/recative-service-sdk/pkg/gin_context"
+	"github.com/recative/recative-service-sdk/pkg/http_engine"
+	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
 	"gorm.io/gorm"
 )
 
@@ -50,6 +50,13 @@ func Init(dep *Dependence, config Config) {
 	appGroup := dep.HttpEngine.Group("/app")
 	adminGroup := dep.HttpEngine.Group("/admin")
 	{
+		adminTokenController := admin_token.Init(&admin_token.Dependence{
+			Db:         dep.Db,
+			AdminGroup: adminGroup,
+			Config:     config.AdminTokenConfig,
+			DbConfig:   dep.DbConfig,
+		})
+
 		storage.Init(&storage.Dependence{
 			Db:       dep.Db,
 			AppGroup: appGroup,
@@ -57,21 +64,16 @@ func Init(dep *Dependence, config Config) {
 		})
 
 		storage_admin.Init(&storage_admin.Dependence{
-			Db:         dep.Db,
-			AdminGroup: adminGroup,
+			Db:                   dep.Db,
+			AdminGroup:           adminGroup,
+			AdminTokenController: adminTokenController,
 		})
 
 		permission.Init(&permission.Dependence{
-			Db:         dep.Db,
-			AdminGroup: adminGroup,
-			DbConfig:   dep.DbConfig,
-		})
-
-		admin_token.Init(&admin_token.Dependence{
-			Db:         dep.Db,
-			AdminGroup: adminGroup,
-			Config:     config.AdminTokenConfig,
-			DbConfig:   dep.DbConfig,
+			Db:                   dep.Db,
+			AdminGroup:           adminGroup,
+			DbConfig:             dep.DbConfig,
+			AdminTokenController: adminTokenController,
 		})
 	}
 }

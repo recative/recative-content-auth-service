@@ -1,8 +1,8 @@
 package storage_model
 
 import (
-	"github.com/recative/recative-backend-sdk/pkg/db"
-	"github.com/recative/recative-backend-sdk/pkg/logger"
+	"github.com/recative/recative-service-sdk/pkg/db"
+	"github.com/recative/recative-service-sdk/pkg/logger"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )

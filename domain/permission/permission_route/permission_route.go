@@ -2,8 +2,8 @@ package permission_route
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/recative/recative-backend-sdk/pkg/gin_context"
 	"github.com/recative/recative-backend/domain/permission/permission_controller"
+	"github.com/recative/recative-service-sdk/pkg/gin_context"
 )
 
 func Init(adminGroup *gin.RouterGroup, permissionController permission_controller.Controller) {

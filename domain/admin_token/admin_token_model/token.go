@@ -3,7 +3,7 @@ package admin_token_model
 import (
 	"github.com/google/uuid"
 	"github.com/lib/pq"
-	"github.com/recative/recative-backend-sdk/pkg/db/db_err"
+	"github.com/recative/recative-service-sdk/pkg/db/db_err"
 	"gorm.io/gorm"
 	"time"
 )
@@ -16,6 +16,7 @@ type TokenModel interface {
 	ReadAllTokens() (token []Token, err error)
 	ReadSelectTokens(tokenRaws []string) (token []Token, err error)
 	IsTokenExist(token string) bool
+	GenerateSudoToken(sudoToken string) (token Token)
 }
 
 type Token struct {
@@ -28,7 +29,23 @@ type Token struct {
 	TokenParam
 }
 
+type TokenType string
+
+const (
+	TokenTypeAdmin TokenType = "admin"
+	TokenTypeSudo  TokenType = "sudo"
+)
+
+type AdminPermission = string
+
+const (
+	AdminPermissionSudo  AdminPermission = "sudo"
+	AdminPermissionRead  AdminPermission = "read"
+	AdminPermissionWrite AdminPermission = "write"
+)
+
 type TokenParam struct {
+	Type            TokenType      `gorm:"default:'admin'"`
 	Raw             string         `gorm:"unique;index"`
 	AdminPermission pq.StringArray `gorm:"type:varchar[]"`
 	Comment         string
@@ -99,4 +116,20 @@ func (m *model) IsTokenExist(token string) bool {
 	var count int64
 	m.db.Model(&Token{}).Where("raw = ?", token).Count(&count)
 	return count > 0
+}
+
+func (m *model) GenerateSudoToken(sudoToken string) (token Token) {
+	return Token{
+		CreatedAt: time.Time{},
+		UpdatedAt: time.Time{},
+		DeletedAt: gorm.DeletedAt{},
+		Id:        uuid.UUID{},
+		TokenParam: TokenParam{
+			Type:            TokenTypeSudo,
+			Raw:             sudoToken,
+			AdminPermission: []string{AdminPermissionSudo},
+			Comment:         "This is a sudo token",
+			ExpiredAt:       time.Time{},
+		},
+	}
 }

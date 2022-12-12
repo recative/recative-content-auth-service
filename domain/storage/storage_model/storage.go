@@ -3,7 +3,7 @@ package storage_model
 import (
 	"github.com/google/uuid"
 	"github.com/lib/pq"
-	"github.com/recative/recative-backend-sdk/pkg/db/db_err"
+	"github.com/recative/recative-service-sdk/pkg/db/db_err"
 	"gorm.io/gorm"
 	"time"
 )

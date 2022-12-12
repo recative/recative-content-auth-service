@@ -1,6 +1,6 @@
 package permission_model
 
-import "github.com/recative/recative-backend-sdk/pkg/db/db_err"
+import "github.com/recative/recative-service-sdk/pkg/db/db_err"
 
 type PermissionModel interface {
 	ReadPermissionById(permissionId string) (*Permission, error)

@@ -2,12 +2,12 @@ package storage
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/recative/recative-backend-sdk/pkg/db"
 	"github.com/recative/recative-backend/domain/storage/storage_controller"
 	"github.com/recative/recative-backend/domain/storage/storage_model"
 	"github.com/recative/recative-backend/domain/storage/storage_route"
 	"github.com/recative/recative-backend/domain/storage/storage_service"
 	"github.com/recative/recative-backend/domain/storage/storage_service_public"
+	"github.com/recative/recative-service-sdk/pkg/db"
 	"gorm.io/gorm"
 )
 
