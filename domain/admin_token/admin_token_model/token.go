@@ -54,7 +54,7 @@ type TokenParam struct {
 	AdminPermission pq.StringArray `gorm:"type:varchar[]"`
 	Comment         string
 	ExpiredAt       time.Time
-	IsValid         bool `gorm:"default:'true'"`
+	IsValid         bool `gorm:"default:true"`
 }
 
 func (t *Token) BeforeCreate(tx *gorm.DB) (err error) {
