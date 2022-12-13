@@ -40,6 +40,12 @@ func TokenRequestToTokenParam(req spec.TokenRequest) admin_token_model.TokenPara
 	var expiredAt = time.Time{}
 	if req.ExpiredAt != nil {
 		expiredAt, _ = time.Parse(time.RFC3339, *req.ExpiredAt)
+	} else {
+		expiredAt = time.Now().Add(time.Hour * 24 * 30)
+	}
+
+	if req.IsValid == nil {
+		req.IsValid = ref.T(true)
 	}
 
 	return admin_token_model.TokenParam{

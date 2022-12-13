@@ -24,7 +24,7 @@ func Init(dep *Dependence) {
 
 	service := storage_admin_service.New(dep.Db, model, publicService)
 
-	controller := storage_admin_controller.New(dep.Db, service, dep.AdminTokenController)
+	controller := storage_admin_controller.New(dep.Db, service)
 
 	storage_admin_route.Init(dep.AdminGroup, controller, dep.AdminTokenController)
 }

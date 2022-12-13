@@ -569,8 +569,10 @@ components:
           type: string
         expired_at:
           type: string
+          description: 'defaut: 30 days'
         is_valid:
           type: boolean
+          description: 'default: true'
       required:
         - admin_permission
     TokenResponse:
