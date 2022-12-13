@@ -8,7 +8,6 @@ import (
 
 func Init(adminGroup *gin.RouterGroup, adminTokenController admin_token_controller.Controller) {
 	adminGroup.GET("/token/:token",
-		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
 		gin_context.NoSecurityHandler(adminTokenController.GetInfoByToken),
 	)
 	adminGroup.PUT("/token/:token",
@@ -34,7 +33,7 @@ func Init(adminGroup *gin.RouterGroup, adminTokenController admin_token_controll
 
 	adminGroup.POST("/sudo", gin_context.NoSecurityHandler(adminTokenController.GetSudoToken))
 	adminGroup.GET("/temp_user_token",
-		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("sudo")),
+		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("read")),
 		gin_context.NoSecurityHandler(adminTokenController.GetTempToken),
 	)
 }

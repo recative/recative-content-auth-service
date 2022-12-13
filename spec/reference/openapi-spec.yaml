@@ -3,7 +3,10 @@ info:
   title: openapi-spec
   version: '1.0'
   summary: For act-server
-  description: 'If you are trying to figure out admin api, see `/admin/sudo` first please.'
+  description: |-
+    If you are trying to figure out admin api, see `/admin/sudo` first please.
+
+    Use RFC-3339 as time format.
 servers:
   - url: 'http://localhost:12212'
 paths:
@@ -41,11 +44,13 @@ paths:
         '200':
           $ref: '#/components/responses/storageResponse'
       operationId: get-admin-storage_id
-      security:
-        - X-InternalAuthorization: []
       description: |
         Get key/value storage info by stroage key.
+
+        Need admin token which has `read` permission on `X-internalAuthorization` header.
       x-internal: true
+      security:
+        - X-InternalAuthorization: []
     put:
       summary: Update storage
       operationId: put-admin-storage_id
@@ -64,6 +69,8 @@ paths:
         Update key/value storage.
 
         `key` in request body will be ignore.
+
+        Need admin token which has `write` permission on `X-internalAuthorization` header.
       x-internal: true
     delete:
       summary: Delete storage
@@ -73,7 +80,10 @@ paths:
           description: No Content
       security:
         - X-InternalAuthorization: []
-      description: Delete key/value storage by storage_key.
+      description: |-
+        Delete key/value storage by storage_key.
+
+        Need admin token which has `write` permission on `X-internalAuthorization` header.
       x-internal: true
   /admin/storage:
     post:
@@ -89,7 +99,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/StorageRequest'
-      description: Create a record in key/value storage.
+      description: |-
+        Create a record in key/value storage.
+
+        Need admin token which has `write` permission on `X-internalAuthorization` header.
       x-internal: true
   /admin/storages:
     post:
@@ -109,15 +122,24 @@ paths:
         description: ''
       security:
         - X-InternalAuthorization: []
-      description: Admin get storages by keys.
+      description: |-
+        Admin get storages by keys.
+
+        Need admin token which has `read` permission on `X-internalAuthorization` header.
       x-internal: true
     parameters: []
     get:
-      summary: ''
+      summary: Get all storages
       operationId: get-admin-storages
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/storagesResponse'
+      description: |
+        Return all storages.
+
+        Need admin token which has `read` permission on `X-internalAuthorization` header.
+      security:
+        - X-InternalAuthorization: []
   /admin/storages/query:
     parameters: []
     post:
@@ -128,12 +150,14 @@ paths:
           $ref: '#/components/responses/storagesResponse'
       security:
         - X-InternalAuthorization: []
-      description: |-
+      description: |
         Get storage by query params in request body.
 
         if request body is empty, will return all storages.
 
         include_permission will effect first.
+
+        Need admin token which has `read` permission on `X-internalAuthorization` header.
       x-internal: true
       requestBody:
         content:
@@ -172,7 +196,10 @@ paths:
         '200':
           $ref: '#/components/responses/permissionResponse'
       operationId: get-admin-permission
-      description: Admin get permission info by permission id.
+      description: |-
+        Admin get permission info by permission id.
+
+        Need admin token which has `read` permission on `X-internalAuthorization` header.
       security:
         - X-InternalAuthorization: []
       x-internal: true
@@ -193,6 +220,8 @@ paths:
         Admin update permission.
 
         permission_id in request body will be ignored.
+
+        Need admin token which has `write` permission on `X-internalAuthorization` header.
       x-internal: true
     delete:
       summary: Admin delete permission
@@ -202,7 +231,10 @@ paths:
           description: No Content
       security:
         - X-InternalAuthorization: []
-      description: Admin delete permission.
+      description: |
+        Admin delete permission.
+
+        Need admin token which has `write` permission on `X-internalAuthorization` header.
       x-internal: true
     parameters:
       - schema:
@@ -224,7 +256,10 @@ paths:
               $ref: '#/components/schemas/PermissionRequest'
       security:
         - X-InternalAuthorization: []
-      description: Admin create permission.
+      description: |
+        Admin create permission.
+
+        Need admin token which has `write` permission on `X-internalAuthorization` header.
       x-internal: true
   /admin/permissions:
     post:
@@ -243,7 +278,10 @@ paths:
               description: array of permission id
               items:
                 type: string
-      description: Admin get permission by permission id.
+      description: |-
+        Admin get permission by permission id.
+
+        Need admin token which has `read` permission on `X-internalAuthorization` header.
       x-internal: true
     get:
       summary: Get all permissions
@@ -253,6 +291,10 @@ paths:
           $ref: '#/components/responses/permissionsResponse'
       security:
         - X-InternalAuthorization: []
+      description: |-
+        Return all permissions.
+
+        Need admin token which has `read` permission on `X-internalAuthorization` header.
   /admin/permissions/query:
     post:
       summary: Admin get permission by query params
@@ -272,11 +314,13 @@ paths:
                 regex:
                   type: string
         description: ''
-      description: |-
+      description: |
         Admin get permission by query params in request body.
 
         `regex` key in request body is a regex express, will return all permissions fit this regex expresss. 
         if request body is empty, will return all permissions.
+
+        Need admin token which has `read` permission on `X-internalAuthorization` header.
       x-internal: true
     parameters: []
   '/admin/token/{token}':
@@ -300,7 +344,10 @@ paths:
       security:
         - X-InternalAuthorization: []
       x-internal: true
-      description: Update token info.
+      description: |-
+        Update token info.
+
+        Need admin token which has `sudo` permission on `X-internalAuthorization` header.
     delete:
       summary: Admin delete token
       operationId: delete-admin-authrization_token
@@ -310,17 +357,19 @@ paths:
       security:
         - X-InternalAuthorization: []
       x-internal: true
-      description: Admin delete token.
+      description: |-
+        Admin delete token.
+
+        Need admin token which has `sudo` permission on `X-internalAuthorization` header.
     get:
       summary: Admin get token info
       operationId: get-admin-token
       responses:
         '200':
           $ref: '#/components/responses/tokenResponse'
-      security:
-        - X-InternalAuthorization: []
       x-internal: true
-      description: Admin get token info.
+      description: |
+        Admin get token info.
   /admin/token:
     post:
       summary: Admin create new token
@@ -336,7 +385,10 @@ paths:
       security:
         - X-InternalAuthorization: []
       x-internal: true
-      description: Admin create new token.
+      description: |
+        Admin create new token.
+
+        Need admin token which has `sudo` permission on `X-internalAuthorization` header.
     parameters: []
   /admin/tokens:
     get:
@@ -350,7 +402,10 @@ paths:
       security:
         - X-InternalAuthorization: []
       x-internal: true
-      description: Admin get all tokens.
+      description: |-
+        Admin get all tokens.
+
+        Need admin token which has `sudo` permission on `X-internalAuthorization` header.
     post:
       summary: Admin get tokens by token id
       operationId: post-admin-auth-tokens
@@ -366,7 +421,10 @@ paths:
               items:
                 type: string
         description: 'if request body is empty, return all tokens.'
-      description: Admin get tokens by token id.
+      description: |
+        Admin get tokens by token id.
+
+        Need admin token which has `sudo` permission on `X-internalAuthorization` header.
       security:
         - X-InternalAuthorization: []
       x-internal: true
@@ -400,7 +458,10 @@ paths:
         '200':
           $ref: '#/components/responses/rawTokenResponse'
       operationId: get-admin-temp_token
-      description: Generate an temp user token with all permissions and expired in 5 minutes for `/app/storage` api for test.
+      description: |-
+        Generate an temp user token with all permissions and expired in 5 minutes for `/app/storage` api for test.
+
+        Need admin token which has `read` permission on `X-internalAuthorization` header.
       security:
         - X-InternalAuthorization: []
       x-internal: true
