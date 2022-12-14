@@ -35,7 +35,7 @@ runDockerCompose(){
 }
 runDockerCompose
 
-docker logs api-test-app-1
+docker logs api-test_app_1
 
 apiTest(){
   i=0
