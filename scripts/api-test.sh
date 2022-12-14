@@ -2,7 +2,7 @@
 set -e
 
 export GO111MODULE=on
-export CGO_ENABLED=0
+#export CGO_ENABLED=0
 export GOOS=linux
 export GOARCH=amd64
 
