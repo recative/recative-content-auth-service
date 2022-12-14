@@ -34,6 +34,8 @@ runDockerCompose(){
 }
 runDockerCompose
 
+docker logs api-test_app_1
+
 apiTest(){
   i=0
   while ! nc -z localhost 12211; do
