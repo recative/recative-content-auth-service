@@ -20,8 +20,6 @@ services:
     build:
       context: .
       dockerfile: "Dockerfile_app"
-    command:
-      - ls -al
     volumes:
       - ./config.yaml:/app/config.yaml
     ports:

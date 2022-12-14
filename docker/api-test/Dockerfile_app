@@ -9,8 +9,10 @@ ENV ENVIRONMENT TEST
 
 ADD dist/recative-backend /app/
 
+RUN ls -al /app
+
 EXPOSE 12211
 
 WORKDIR /app
 
-#ENTRYPOINT ["/app/recative-backend"]
+ENTRYPOINT ["/app/recative-backend"]
