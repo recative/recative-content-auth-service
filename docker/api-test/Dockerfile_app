@@ -1,6 +1,6 @@
 FROM ubuntu
 
-RUN apt install -U --no-cache ca-certificates tzdata
+RUN apt update -y && apt install -y ca-certificates tzdata
 
 ARG TZ=Asia/Shanghai
 RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
