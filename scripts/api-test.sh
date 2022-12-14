@@ -44,7 +44,7 @@ apiTest(){
       echo "timeout"
       exit 1
     fi
-    sleep 0.5 # wait for 1/10 of the second before check again
+    sleep 2 # wait for 1/10 of the second before check again
     ((i++))
   done
   cd "$TEST_DIR" && npm install && npm run test:update:snapshot && npm run test
