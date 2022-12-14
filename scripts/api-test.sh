@@ -33,6 +33,7 @@ runDockerCompose(){
 }
 runDockerCompose
 
+tree
 docker logs api-test_app_1
 
 apiTest(){
