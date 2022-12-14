@@ -18,8 +18,9 @@ init
 serverBuild(){
   export GOOS=linux
   echo "------> build ${APP_NAME}"
-  go mod tidy
 
+  go generate ./...
+  go mod tidy
   if [[ -f "${RUN_DIR}/main.go" ]]; then
     go build -o "${DIST_DIR}/${APP_NAME}" "${RUN_DIR}"
   fi
