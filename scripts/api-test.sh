@@ -36,7 +36,7 @@ runDockerCompose
 
 apiTest(){
   sleep 15
-  cd "$TEST_DIR" && npm install && npm run test
+  cd "$TEST_DIR" && npm install && npm run test:update:snapshot && npm run test
 }
 apiTest
 

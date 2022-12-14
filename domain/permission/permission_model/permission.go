@@ -109,7 +109,7 @@ func (m *model) IsPermissionsExist(permissionIds []string) (miss []string, ok bo
 
 func (m *model) ReadPermissionByRegexQuery(query string) ([]*Permission, error) {
 	var permissions []*Permission
-	err := m.db.Where("id LIKE ?", "%"+query+"%").Find(&permissions).Error
+	err := m.db.Where("id ~* ?", query).Find(&permissions).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}

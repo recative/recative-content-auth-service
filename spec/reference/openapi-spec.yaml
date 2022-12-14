@@ -267,7 +267,7 @@ paths:
       operationId: post-admin-permissions
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/permissionsResponse'
       security:
         - X-InternalAuthorization: []
       requestBody:
@@ -319,6 +319,8 @@ paths:
 
         `regex` key in request body is a regex express, will return all permissions fit this regex expresss. 
         if request body is empty, will return all permissions.
+
+        Case Insensitive.
 
         Need admin token which has `read` permission on `X-internalAuthorization` header.
       x-internal: true
