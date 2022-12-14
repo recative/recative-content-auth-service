@@ -36,7 +36,16 @@ runDockerCompose(){
 runDockerCompose
 
 apiTest(){
-  sleep 15
+  i=0
+  while ! nc -z localhost 12211; do
+    echo "waiting for server to start: $i times"
+    if [[ "$i" == 10 ]]; then
+      echo "timeout"
+      exit 1
+    fi
+    sleep 0.5 # wait for 1/10 of the second before check again
+    ((i++))
+  done
   cd "$TEST_DIR" && npm install && npm run test:update:snapshot && npm run test
 }
 apiTest
