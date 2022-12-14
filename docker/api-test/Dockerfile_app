@@ -1,4 +1,4 @@
-FROM alpine:3.6 as alpine
+FROM ubuntu
 
 RUN apk add -U --no-cache ca-certificates tzdata
 
