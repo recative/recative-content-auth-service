@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 BASE_DIR=$(cd "$(dirname "$0")";cd .. || exit; pwd)
 
@@ -32,9 +33,6 @@ runDockerCompose(){
   fi
 }
 runDockerCompose
-
-tree
-docker logs api-test_app_1
 
 apiTest(){
   i=0
