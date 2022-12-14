@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+export GO111MODULE=on
+export CGO_ENABLED=0
+export GOOS=linux
+export GOARCH=amd64
+
 BASE_DIR=$(cd "$(dirname "$0")";cd .. || exit; pwd)
 
 DOCKER_DIR="${BASE_DIR}/docker/api-test"
