@@ -2,6 +2,7 @@ package permission_controller
 
 import (
 	"github.com/recative/recative-backend/domain/permission/permission_format"
+	"github.com/recative/recative-backend/domain/permission/permission_model"
 	"github.com/recative/recative-backend/domain/permission/permission_service"
 	"github.com/recative/recative-backend/spec"
 	"github.com/recative/recative-service-sdk/pkg/gin_context"
@@ -16,8 +17,8 @@ type Controller interface {
 	DeletePermissionById(c *gin_context.NoSecurityContext)
 	CreatePermission(c *gin_context.NoSecurityContext)
 	BatchGetPermission(c *gin_context.NoSecurityContext)
+	PostGetPermissionByQuery(c *gin_context.NoSecurityContext)
 	GetAllPermissions(c *gin_context.NoSecurityContext)
-	PostGetPermissionsByQuery(c *gin_context.NoSecurityContext)
 }
 
 type controller struct {
@@ -130,6 +131,27 @@ func (con *controller) GetAllPermissions(c *gin_context.NoSecurityContext) {
 	return
 }
 
-func (con *controller) PostGetPermissionsByQuery(c *gin_context.NoSecurityContext) {
+func (con *controller) PostGetPermissionByQuery(c *gin_context.NoSecurityContext) {
+	var body spec.GetAdminPermissionsJSONBody
+	err := c.C.ShouldBindJSON(&body)
+	if err != nil {
+		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
+		return
+	}
 
+	var permissions []*permission_model.Permission
+	if body.Regex == nil {
+		permissions, err = con.service.ReadAllPermissions()
+	} else {
+		permissions, err = con.service.ReadPermissionsByRegexQuery(*body.Regex)
+	}
+	if err != nil {
+		response.Err(c.C, err)
+		return
+	}
+
+	var res spec.PermissionsResponse
+	res = permission_format.PermissionsToResponse(permissions)
+	response.Ok(c.C, res)
+	return
 }

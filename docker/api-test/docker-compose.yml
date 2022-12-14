@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  psql:
+    image: postgres:14.2
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=auth_service_test
+
+#  redis:
+#    image: redis:6.2.6
+#    ports:
+#      - "6379:6379"
+#    command: redis-server --requirepass test
+
+  app:
+    build:
+      context: .
+      dockerfile: "Dockerfile_app"
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    ports:
+      - "12211:12211"
+    depends_on:
+      - psql
+    restart: always

@@ -10,6 +10,7 @@ type PermissionModel interface {
 	ReadPermissionsByKeys(keys []string) ([]*Permission, error)
 	ReadAllPermissions() ([]*Permission, error)
 	IsPermissionsExist([]string) ([]string, bool)
+	ReadPermissionByRegexQuery(query string) ([]*Permission, error)
 }
 
 type Permission struct {
@@ -104,4 +105,13 @@ func (m *model) IsPermissionsExist(permissionIds []string) (miss []string, ok bo
 		return miss, false
 	}
 	return nil, true
+}
+
+func (m *model) ReadPermissionByRegexQuery(query string) ([]*Permission, error) {
+	var permissions []*Permission
+	err := m.db.Where("id LIKE ?", "%"+query+"%").Find(&permissions).Error
+	if err != nil {
+		return nil, db_err.Wrap(err)
+	}
+	return permissions, nil
 }
