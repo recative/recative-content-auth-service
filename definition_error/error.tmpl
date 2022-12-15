@@ -1,0 +1,16 @@
+// Generate by error_generator.go, never change this file manually.
+//go:build !generate
+package definition_error
+
+import (
+    "github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
+)
+
+var (
+	{{ range .Structs}}
+		{{.PublicName}} = http_err.ResponseErrorType{
+			Code: {{.Code}},
+			Name: "{{.Name}}",
+		}
+	{{ end }}
+)

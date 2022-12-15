@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "sticker_background_pose_avatar",
+  "description": "",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "required": ["code", "name"]
+  }
+}

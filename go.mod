@@ -7,12 +7,14 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
+	github.com/iancoleman/strcase v0.2.0
 	github.com/lib/pq v1.10.2
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/recative/recative-service-sdk v0.3.2-0.20221214022803-ece85519b3dd
+	github.com/recative/recative-service-sdk v0.4.0
 	github.com/samber/lo v1.28.2
 	github.com/spf13/viper v1.13.0
 	go.uber.org/zap v1.23.0
+	golang.org/x/tools v0.1.8-0.20211029000441-d6a9af8af023
 	gorm.io/gorm v1.23.9
 )
 
@@ -58,9 +60,11 @@ require (
 	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
+	golang.org/x/mod v0.6.0-dev.0.20211013180041-c96bc1413d57 // indirect
 	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2 // indirect
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/xerrors v0.0.0-20220517211312-f3a8303e98df // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

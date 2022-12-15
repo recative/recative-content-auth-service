@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv'
+
+dotenv.config()
+
 const APEnv = ["ROOT_TOKEN", "BASEURL", "SUDO_TOKEN", "READ_TOKEN", "WRITE_TOKEN"] as const;
 
 type APEnvType = typeof APEnv[number];

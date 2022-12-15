@@ -1,7 +1,7 @@
 package storage_controller
 
 import (
-	"github.com/recative/recative-backend/definition"
+	"github.com/recative/recative-backend/domain/domain_definition"
 	"github.com/recative/recative-backend/domain/storage/storage_format"
 	"github.com/recative/recative-backend/domain/storage/storage_service"
 	"github.com/recative/recative-backend/spec"
@@ -12,7 +12,7 @@ import (
 )
 
 type Controller interface {
-	PostAppStorage(c *gin_context.Context[definition.JwtPayload])
+	PostAppStorage(c *gin_context.Context[domain_definition.JwtPayload])
 }
 
 type controller struct {
@@ -27,7 +27,7 @@ func New(db *gorm.DB, service storage_service.Service) Controller {
 	}
 }
 
-func (con *controller) PostAppStorage(c *gin_context.Context[definition.JwtPayload]) {
+func (con *controller) PostAppStorage(c *gin_context.Context[domain_definition.JwtPayload]) {
 	var body spec.PostAppStorageJSONRequestBody
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {

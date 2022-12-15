@@ -6,8 +6,8 @@
   "scripts": {
     "gen-api": "openapi-typescript ../spec/reference/openapi-spec.yaml --output ./src/generated/schema.ts",
     "postinstall": "npm run gen-api",
-    "test": "dotenv -e .env -- vitest --run",
-    "test:update:snapshot":"dotenv -e .env -- vitest --run -u"
+    "test": "vitest --run",
+    "test:update:snapshot": "vitest --run -u"
   },
   "author": "",
   "license": "ISC",
@@ -18,7 +18,7 @@
     "vitest": "^0.25.8"
   },
   "dependencies": {
-    "cross-fetch": "^3.1.5",
+    "dotenv": "^16.0.3",
     "openapi-typescript-fetch": "^1.1.3"
   }
 }

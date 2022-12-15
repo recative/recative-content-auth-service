@@ -21,7 +21,9 @@ type Controller interface {
 	GetSelectTokens(c *gin_context.NoSecurityContext)
 	GetSudoToken(c *gin_context.NoSecurityContext)
 	GetTempToken(c *gin_context.NoSecurityContext)
+	PostTempToken(c *gin_context.NoSecurityContext)
 	CheckAdminTokenPermission(needPermissions ...string) func(c *gin_context.NoSecurityContext)
+	CheckRootToken() func(c *gin_context.NoSecurityContext)
 }
 
 type controller struct {
@@ -165,6 +167,19 @@ func (con *controller) GetSudoToken(c *gin_context.NoSecurityContext) {
 }
 
 func (con *controller) GetTempToken(c *gin_context.NoSecurityContext) {
+	token, err := con.service.GenerateTempUserToken()
+	if err != nil {
+		response.Err(c.C, err)
+		return
+	}
+
+	var res spec.RawTokenResponse
+	res.Token = token
+	response.Ok(c.C, res)
+	return
+}
+
+func (con *controller) PostTempToken(c *gin_context.NoSecurityContext) {
 
 }
 
@@ -192,6 +207,25 @@ func (con *controller) CheckAdminTokenPermission(needPermissions ...string) func
 		}
 
 		response.Err(c.C, http_err.Forbidden.New("permission denied"))
+		return
+	}
+}
+
+func (con *controller) CheckRootToken() func(c *gin_context.NoSecurityContext) {
+	return func(c *gin_context.NoSecurityContext) {
+		var body spec.PostAdminSudoJSONBody
+		err := c.C.ShouldBindJSON(&body)
+		if err != nil {
+			response.Err(c.C, http_err.InvalidArgument.Wrap(err))
+			return
+		}
+
+		if body.RootToken != con.config.RootToken {
+			response.Err(c.C, http_err.Unauthorized.New("root token in request body is invalid"))
+			return
+		}
+
+		c.C.Next()
 		return
 	}
 }

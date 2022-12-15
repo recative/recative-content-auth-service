@@ -5,6 +5,7 @@ import (
 	"github.com/patrickmn/go-cache"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_model"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_service_public"
+	"github.com/recative/recative-backend/domain/permission/permission_service_public"
 	"github.com/recative/recative-service-sdk/util/ref"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
@@ -22,21 +23,24 @@ type Service interface {
 	CreateSudoToken(inputRootToken string) (sudoToken string, err error)
 	IsTokenExist(token string) bool
 	IsSudoTokenValid(token string) bool
+	GenerateTempUserToken() (token string, err error)
 }
 
 type service struct {
 	db    *gorm.DB
 	model admin_token_model.Model
 	admin_token_service_public.Service
-	cache *cache.Cache
+	cache                   *cache.Cache
+	permissionPublicService permission_service_public.Service
 }
 
-func New(db *gorm.DB, model admin_token_model.Model, publicService admin_token_service_public.Service) Service {
+func New(db *gorm.DB, model admin_token_model.Model, publicService admin_token_service_public.Service, permissionPublicService permission_service_public.Service) Service {
 	return &service{
-		db:      db,
-		model:   model,
-		Service: publicService,
-		cache:   cache.New(5*time.Minute, 10*time.Minute),
+		db:                      db,
+		model:                   model,
+		Service:                 publicService,
+		cache:                   cache.New(5*time.Minute, 10*time.Minute),
+		permissionPublicService: permissionPublicService,
 	}
 }
 
@@ -108,4 +112,9 @@ func (s *service) GetSudoToken() (sudoToken string, isExist bool) {
 
 func (s *service) IsTokenExist(token string) bool {
 	return s.model.IsTokenExist(token)
+}
+
+func (s *service) GenerateTempUserToken() (token string, err error) {
+	//s.permissionPublicService.ReadAllPermissions()
+	return "", err
 }

@@ -1,4 +1,4 @@
-package definition
+package domain_definition
 
 type JwtPayload struct {
 	UserId      string
