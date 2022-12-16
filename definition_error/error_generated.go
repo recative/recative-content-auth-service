@@ -8,8 +8,13 @@ import (
 )
 
 var (
-	InternalServerError = http_err.ResponseErrorType{
-		Code: 500000,
-		Name: "internal_server_error",
+	TimeFormatNotSupported = http_err.ResponseErrorType{
+		Code: 401001,
+		Name: "time_format_not_supported",
+	}
+
+	PermissionNotExist = http_err.ResponseErrorType{
+		Code: 400001,
+		Name: "permission_not_exist",
 	}
 )

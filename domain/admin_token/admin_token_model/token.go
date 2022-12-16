@@ -22,7 +22,6 @@ type TokenModel interface {
 type Token struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
 
 	Id uuid.UUID `gorm:"primaryKey;not null;uniqueIndex"`
 
@@ -54,7 +53,7 @@ type TokenParam struct {
 	AdminPermission pq.StringArray `gorm:"type:varchar[]"`
 	Comment         string
 	ExpiredAt       time.Time
-	IsValid         bool `gorm:"default:true"`
+	IsValid         bool
 }
 
 func (t *Token) BeforeCreate(tx *gorm.DB) (err error) {
@@ -127,7 +126,6 @@ func (m *model) GenerateSudoToken(sudoToken string) (token Token) {
 	return Token{
 		CreatedAt: time.Time{},
 		UpdatedAt: time.Time{},
-		DeletedAt: gorm.DeletedAt{},
 		Id:        uuid.UUID{},
 		TokenParam: TokenParam{
 			Type:            TokenTypeSudo,

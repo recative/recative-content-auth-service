@@ -1,0 +1,63 @@
+// Vitest Snapshot v1
+
+exports[`admin token crud > create admin token 1`] = `
+{
+  "token": "38a44a3f-c108-412b-a910-9e47adc17c27",
+}
+`;
+
+exports[`admin token crud > delete token 1`] = `undefined`;
+
+exports[`admin token crud > get admin token info 1`] = `
+{
+  "admin_permission": [
+    "write",
+  ],
+  "comment": "a token for test",
+  "expired_at": undefined,
+  "is_valid": true,
+  "token": "38a44a3f-c108-412b-a910-9e47adc17c27",
+  "type": "admin",
+}
+`;
+
+exports[`admin token crud > get all tokens 1`] = `
+[
+  {
+    "admin_permission": [
+      "read",
+      "write",
+    ],
+    "comment": "test1",
+    "expired_at": undefined,
+    "is_valid": true,
+    "token": "1919810",
+    "type": "admin",
+  },
+  {
+    "admin_permission": [
+      "sudo",
+    ],
+    "comment": "test2",
+    "expired_at": undefined,
+    "is_valid": true,
+    "token": "114514",
+    "type": "admin",
+  },
+]
+`;
+
+exports[`admin token crud > update admin token 1`] = `undefined`;
+
+exports[`admin token crud > update admin token 2`] = `
+{
+  "admin_permission": [
+    "read",
+  ],
+  "comment": "a token for test",
+  "expired_at": undefined,
+  "is_valid": true,
+  "token": "38a44a3f-c108-412b-a910-9e47adc17c27",
+  "type": "admin",
+}
+`;

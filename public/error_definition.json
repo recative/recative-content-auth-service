@@ -1,6 +1,10 @@
 [
   {
-    "code": 500000,
-    "name": "internal_server_error"
+    "code": 401001,
+    "name": "time_format_not_supported"
+  },
+  {
+    "code": 400001,
+    "name": "permission_not_exist"
   }
 ]

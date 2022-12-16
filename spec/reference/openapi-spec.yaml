@@ -377,8 +377,8 @@ paths:
       summary: Admin create new token
       operationId: post-admain-token
       responses:
-        '204':
-          description: No Content
+        '200':
+          $ref: '#/components/responses/rawTokenResponse'
       requestBody:
         content:
           application/json:
@@ -467,7 +467,47 @@ paths:
       security:
         - X-InternalAuthorization: []
       x-internal: true
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: expires_at
+          description: RFC 3339 format
     parameters: []
+    post:
+      summary: Admin generate user temp token user selected permissions
+      operationId: post-admin-temp_user_token
+      responses:
+        '200':
+          $ref: '#/components/responses/rawTokenResponse'
+      description: |-
+        Generate an temp user token with the permission you selected and expired in 5 minutes for `/app/storage` api for test.
+
+        if `guard_permission_exist`(default false) is set to true, backend will guard the permissions in request body is exist in database.
+
+        if `expires_at` isn't set, token will expired after 5 mintues.
+
+        Need admin token which has `read` permission on `X-internalAuthorization` header.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expires_at:
+                  type: string
+                  description: RFC 3339 format
+                guard_permission_exist:
+                  type: boolean
+                  default: false
+                permissions:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - guard_permission_exist
+                - permissions
+        description: ''
 components:
   schemas:
     StorageResponse:

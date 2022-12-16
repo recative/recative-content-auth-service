@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`admin token crud > create admin token 1`] = `
+{
+  "token": "b37adb2c-5ba5-40e8-9b12-34374bf8fdf2",
+}
+`;

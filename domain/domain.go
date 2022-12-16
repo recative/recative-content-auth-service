@@ -6,6 +6,8 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/recative/recative-backend/domain/admin_token"
 	"github.com/recative/recative-backend/domain/permission"
+	"github.com/recative/recative-backend/domain/permission/permission_model"
+	"github.com/recative/recative-backend/domain/permission/permission_service_public"
 	"github.com/recative/recative-backend/domain/storage"
 	"github.com/recative/recative-backend/domain/storage_admin"
 	"github.com/recative/recative-service-sdk/pkg/auth"
@@ -50,11 +52,14 @@ func Init(dep *Dependence, config Config) {
 	appGroup := dep.HttpEngine.Group("/app")
 	adminGroup := dep.HttpEngine.Group("/admin")
 	{
+
 		adminTokenController := admin_token.Init(&admin_token.Dependence{
-			Db:         dep.Db,
-			AdminGroup: adminGroup,
-			Config:     config.AdminTokenConfig,
-			DbConfig:   dep.DbConfig,
+			Db:                      dep.Db,
+			AdminGroup:              adminGroup,
+			Config:                  config.AdminTokenConfig,
+			DbConfig:                dep.DbConfig,
+			Auther:                  dep.Auther,
+			PermissionServicePublic: permission_service_public.New(dep.Db, permission_model.New(dep.Db)),
 		})
 
 		storage.Init(&storage.Dependence{

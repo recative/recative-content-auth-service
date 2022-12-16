@@ -11,6 +11,7 @@ func Init(db *gorm.DB) {
 	autoMigrate(db)
 
 	InitPermission(db)
+	InitAdminToken(db)
 }
 
 func autoMigrate(db *gorm.DB) {

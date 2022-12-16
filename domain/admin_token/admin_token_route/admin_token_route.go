@@ -39,8 +39,8 @@ func Init(adminGroup *gin.RouterGroup, adminTokenController admin_token_controll
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("read")),
 		gin_context.NoSecurityHandler(adminTokenController.GetTempToken),
 	)
-	adminGroup.GET("/temp_user_token",
+	adminGroup.POST("/temp_user_token",
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("read")),
-		gin_context.NoSecurityHandler(adminTokenController.GetTempToken),
+		gin_context.NoSecurityHandler(adminTokenController.PostTempToken),
 	)
 }

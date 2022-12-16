@@ -1,6 +1,7 @@
 package admin_token_controller
 
 import (
+	"github.com/recative/recative-backend/definition_error"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_config"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_format"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_service"
@@ -10,6 +11,7 @@ import (
 	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Controller interface {
@@ -43,7 +45,7 @@ func New(db *gorm.DB, service admin_token_service.Service, config admin_token_co
 func (con *controller) GetInfoByToken(c *gin_context.NoSecurityContext) {
 	tokenRaw := c.C.Param("token")
 	if tokenRaw == "" {
-		response.Err(c.C, http_err.InvalidArgument)
+		response.Err(c.C, http_err.InvalidArgument.New())
 		return
 	}
 
@@ -86,7 +88,7 @@ func (con *controller) PutTokenInfo(c *gin_context.NoSecurityContext) {
 func (con *controller) DeleteToken(c *gin_context.NoSecurityContext) {
 	tokenRaw := c.C.Param("token")
 	if tokenRaw == "" {
-		response.Err(c.C, http_err.InvalidArgument)
+		response.Err(c.C, http_err.InvalidArgument.New())
 		return
 	}
 
@@ -114,8 +116,8 @@ func (con *controller) CreateToken(c *gin_context.NoSecurityContext) {
 		return
 	}
 
-	var res spec.TokenResponse
-	res = admin_token_format.TokenToResponse(&token)
+	var res spec.RawTokenResponse
+	res.Token = token.Raw
 	response.Ok(c.C, res)
 }
 
@@ -147,14 +149,7 @@ func (con *controller) GetSelectTokens(c *gin_context.NoSecurityContext) {
 }
 
 func (con *controller) GetSudoToken(c *gin_context.NoSecurityContext) {
-	var body spec.PostAdminSudoJSONRequestBody
-	err := c.C.ShouldBindJSON(&body)
-	if err != nil {
-		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
-		return
-	}
-
-	sudoToken, err := con.service.CreateSudoToken(body.RootToken)
+	sudoToken, err := con.service.CreateSudoToken()
 	if err != nil {
 		response.Err(c.C, err)
 		return
@@ -167,7 +162,19 @@ func (con *controller) GetSudoToken(c *gin_context.NoSecurityContext) {
 }
 
 func (con *controller) GetTempToken(c *gin_context.NoSecurityContext) {
-	token, err := con.service.GenerateTempUserToken()
+	expiresAtString := c.C.Param("expires_at")
+
+	var time_ *time.Time
+	if expiresAtString != "" {
+		time__, err := time.Parse(time.RFC3339, expiresAtString)
+		if err != nil {
+			response.Err(c.C, definition_error.TimeFormatNotSupported.Wrap(err))
+			return
+		}
+		time_ = &time__
+	}
+
+	token, err := con.service.GenerateTempUserTokenWithAllPermission(time_)
 	if err != nil {
 		response.Err(c.C, err)
 		return
@@ -180,7 +187,28 @@ func (con *controller) GetTempToken(c *gin_context.NoSecurityContext) {
 }
 
 func (con *controller) PostTempToken(c *gin_context.NoSecurityContext) {
+	var body spec.PostAdminTempUserTokenJSONBody
+	err := c.C.ShouldBindJSON(&body)
+	if err != nil {
+		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
+		return
+	}
 
+	var time_ *time.Time
+	if body.ExpiresAt != nil {
+		time__, err := time.Parse(time.RFC3339, *body.ExpiresAt)
+		if err != nil {
+			response.Err(c.C, definition_error.TimeFormatNotSupported.Wrap(err))
+			return
+		}
+		time_ = &time__
+	}
+
+	token, err := con.service.GenerateTempUserToken(body.Permissions, body.GuardPermissionExist, time_)
+	var res spec.RawTokenResponse
+	res.Token = token
+	response.Ok(c.C, res)
+	return
 }
 
 func (con *controller) CheckAdminTokenPermission(needPermissions ...string) func(c *gin_context.NoSecurityContext) {
@@ -191,7 +219,7 @@ func (con *controller) CheckAdminTokenPermission(needPermissions ...string) func
 		}
 		ok := con.service.IsTokenExist(internalAuthorizationToken)
 		if !ok {
-			response.Err(c.C, http_err.Unauthorized)
+			response.Err(c.C, http_err.Unauthorized.New())
 			return
 		}
 		token, err := con.service.ReadTokenInfo(internalAuthorizationToken)

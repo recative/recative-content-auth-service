@@ -3,9 +3,11 @@ package admin_token_service
 import (
 	"github.com/google/uuid"
 	"github.com/patrickmn/go-cache"
+	"github.com/recative/recative-backend/definition_error"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_model"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_service_public"
 	"github.com/recative/recative-backend/domain/permission/permission_service_public"
+	"github.com/recative/recative-service-sdk/pkg/auth"
 	"github.com/recative/recative-service-sdk/util/ref"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
@@ -20,10 +22,11 @@ type Service interface {
 	CreateToken(param admin_token_model.TokenParam) (token admin_token_model.Token, err error)
 	ReadAllTokens() (token []admin_token_model.Token, err error)
 	ReadSelectTokens(tokenRaws []string) (token []admin_token_model.Token, err error)
-	CreateSudoToken(inputRootToken string) (sudoToken string, err error)
+	CreateSudoToken() (sudoToken string, err error)
 	IsTokenExist(token string) bool
 	IsSudoTokenValid(token string) bool
-	GenerateTempUserToken() (token string, err error)
+	GenerateTempUserToken(permissions []string, checkPermissionExist bool, expiresAt *time.Time) (token string, err error)
+	GenerateTempUserTokenWithAllPermission(expiresAt *time.Time) (token string, err error)
 }
 
 type service struct {
@@ -32,15 +35,17 @@ type service struct {
 	admin_token_service_public.Service
 	cache                   *cache.Cache
 	permissionPublicService permission_service_public.Service
+	auther                  auth.Authable
 }
 
-func New(db *gorm.DB, model admin_token_model.Model, publicService admin_token_service_public.Service, permissionPublicService permission_service_public.Service) Service {
+func New(db *gorm.DB, model admin_token_model.Model, publicService admin_token_service_public.Service, permissionPublicService permission_service_public.Service, auther auth.Authable) Service {
 	return &service{
 		db:                      db,
 		model:                   model,
 		Service:                 publicService,
 		cache:                   cache.New(5*time.Minute, 10*time.Minute),
 		permissionPublicService: permissionPublicService,
+		auther:                  auther,
 	}
 }
 
@@ -84,7 +89,7 @@ func (s *service) ReadSelectTokens(tokenRaws []string) (token []admin_token_mode
 
 const SudoToken = "sudo-token"
 
-func (s *service) CreateSudoToken(inputRootToken string) (res string, err error) {
+func (s *service) CreateSudoToken() (res string, err error) {
 	sudoToken, isExist := s.cache.Get(SudoToken)
 	if isExist {
 		return sudoToken.(string), nil
@@ -114,7 +119,34 @@ func (s *service) IsTokenExist(token string) bool {
 	return s.model.IsTokenExist(token)
 }
 
-func (s *service) GenerateTempUserToken() (token string, err error) {
-	//s.permissionPublicService.ReadAllPermissions()
+func (s *service) GenerateTempUserTokenWithAllPermission(expiresAt *time.Time) (token string, err error) {
+	if expiresAt == nil {
+		expiresAt = ref.T(time.Now().Add(5 * time.Minute))
+	}
+
+	s.auther.GenJwt(map[string]any{
+		"permissions": "all",
+		"exp":         expiresAt.Unix(),
+	})
+
 	return "", err
+}
+
+func (s *service) GenerateTempUserToken(permissions []string, guardPermissionExist bool, expiresAt *time.Time) (token string, err error) {
+	if guardPermissionExist {
+		missedPermissions, ok := s.permissionPublicService.IsPermissionsExist(permissions)
+		if !ok {
+			return "", definition_error.PermissionNotExist.NewWithPayload("permissions not exist", missedPermissions)
+		}
+	}
+
+	if expiresAt == nil {
+		expiresAt = ref.T(time.Now().Add(5 * time.Minute))
+	}
+
+	token = s.auther.GenJwt(map[string]any{
+		"permissions": permissions,
+		"exp":         expiresAt.Unix(),
+	})
+	return token, nil
 }

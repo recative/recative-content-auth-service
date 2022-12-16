@@ -17,11 +17,12 @@ init
 
 serverBuild(){
   # important without this, binary will brake in alpine
+  go generate ./...
+
   export CGO_ENABLED=0
   export GOOS=linux
   echo "------> build ${APP_NAME}"
 
-  go generate ./...
   go mod tidy
   go build -o "${DIST_DIR}/${APP_NAME}" "${RUN_DIR}"
 }

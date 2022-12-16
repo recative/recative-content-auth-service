@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: "Dockerfile_app"
     volumes:
-      - ./config.yaml:/app/config.yaml
+      - ./config.docker.yaml:/app/config.yaml
     ports:
       - "12211:12211"
     depends_on:

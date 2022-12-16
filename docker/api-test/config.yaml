@@ -1,10 +1,10 @@
 domain:
-  storage_admin_service:
+  admin_token_config:
     root_token: "1145141919810"
 database:
   is_api_test: true
   is_auto_migrate: false
-  pgsql_uri: postgres://docker:docker@psql:5432/auth_service_test
+  pgsql_uri: postgres://docker:docker@localhost:5432/auth_service_test
   pgsql_max_idle: 5
   pgsql_max_open: 10
 http_engine:
@@ -12,4 +12,4 @@ http_engine:
   server_host: 'example.com'
   listen_addr: ':12211' # must start with `:`
 auth:
-  jwt_secret: ''
+  jwt_secret: 'xxx'
