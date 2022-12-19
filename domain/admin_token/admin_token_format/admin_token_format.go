@@ -8,10 +8,15 @@ import (
 )
 
 func TokenToResponse(token *admin_token_model.Token) spec.TokenResponse {
+	var expiredAt *string
+	if !token.ExpiredAt.IsZero() {
+		expiredAt = ref.T(token.ExpiredAt.Format(time.RFC3339))
+	}
+
 	return spec.TokenResponse{
 		AdminPermission: token.AdminPermission,
 		Comment:         token.Comment,
-		ExpiredAt:       ref.T(token.ExpiredAt.Format(time.RFC3339)),
+		ExpiredAt:       expiredAt,
 		IsValid:         ref.T(token.IsValid()),
 		Token:           token.Raw,
 		Type:            spec.TokenResponseType(token.Type),
