@@ -30,7 +30,7 @@ type Token struct {
 }
 
 func (t *Token) IsValid() bool {
-	return t.TokenParam.IsValid && t.ExpiredAt.After(time.Now())
+	return t.TokenParam.IsValid && (t.ExpiredAt != time.Time{} || t.ExpiredAt.After(time.Now()))
 }
 
 type TokenType string
@@ -136,6 +136,7 @@ func (m *model) GenerateSudoToken(sudoToken string) (token Token) {
 			AdminPermission: []string{AdminPermissionSudo},
 			Comment:         "This is a sudo token",
 			ExpiredAt:       time.Time{},
+			IsValid:         true,
 		},
 	}
 }
@@ -151,6 +152,7 @@ func (m *model) GenerateRootToken(rootToken string) (token Token) {
 			AdminPermission: []string{AdminPermissionRoot},
 			Comment:         "This is the root token",
 			ExpiredAt:       time.Time{},
+			IsValid:         true,
 		},
 	}
 }
