@@ -31,7 +31,7 @@ func Init(dep *Dependence) admin_token_controller.Controller {
 
 	publicService := admin_token_service_public.New(dep.Db, model)
 
-	service := admin_token_service.New(dep.Db, model, publicService, dep.PermissionServicePublic, dep.Auther)
+	service := admin_token_service.New(dep.Db, model, publicService, dep.PermissionServicePublic, dep.Auther, dep.Config)
 
 	controller := admin_token_controller.New(dep.Db, service, dep.Config)
 

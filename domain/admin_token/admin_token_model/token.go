@@ -17,6 +17,7 @@ type TokenModel interface {
 	ReadSelectTokens(tokenRaws []string) (token []Token, err error)
 	IsTokenExist(token string) bool
 	GenerateSudoToken(sudoToken string) (token Token)
+	GenerateRootToken(rootToken string) (token Token)
 }
 
 type Token struct {
@@ -37,11 +38,13 @@ type TokenType string
 const (
 	TokenTypeAdmin TokenType = "admin"
 	TokenTypeSudo  TokenType = "sudo"
+	TokenTypeRoot  TokenType = "root"
 )
 
 type AdminPermission = string
 
 const (
+	AdminPermissionRoot  AdminPermission = "root"
 	AdminPermissionSudo  AdminPermission = "sudo"
 	AdminPermissionRead  AdminPermission = "read"
 	AdminPermissionWrite AdminPermission = "write"
@@ -132,6 +135,21 @@ func (m *model) GenerateSudoToken(sudoToken string) (token Token) {
 			Raw:             sudoToken,
 			AdminPermission: []string{AdminPermissionSudo},
 			Comment:         "This is a sudo token",
+			ExpiredAt:       time.Time{},
+		},
+	}
+}
+
+func (m *model) GenerateRootToken(rootToken string) (token Token) {
+	return Token{
+		CreatedAt: time.Time{},
+		UpdatedAt: time.Time{},
+		Id:        uuid.UUID{},
+		TokenParam: TokenParam{
+			Type:            TokenTypeRoot,
+			Raw:             rootToken,
+			AdminPermission: []string{AdminPermissionRoot},
+			Comment:         "This is the root token",
 			ExpiredAt:       time.Time{},
 		},
 	}

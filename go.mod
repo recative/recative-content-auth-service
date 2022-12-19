@@ -10,7 +10,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/lib/pq v1.10.2
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/recative/recative-service-sdk v0.4.0
+	github.com/recative/recative-service-sdk v0.4.1
 	github.com/samber/lo v1.28.2
 	github.com/spf13/viper v1.13.0
 	go.uber.org/zap v1.23.0
@@ -19,6 +19,7 @@ require (
 )
 
 require (
+	github.com/creasty/defaults v1.6.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect

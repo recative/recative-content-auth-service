@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/patrickmn/go-cache"
 	"github.com/recative/recative-backend/definition_error"
+	"github.com/recative/recative-backend/domain/admin_token/admin_token_config"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_model"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_service_public"
 	"github.com/recative/recative-backend/domain/permission/permission_service_public"
@@ -36,9 +37,10 @@ type service struct {
 	cache                   *cache.Cache
 	permissionPublicService permission_service_public.Service
 	auther                  auth.Authable
+	config                  admin_token_config.Config
 }
 
-func New(db *gorm.DB, model admin_token_model.Model, publicService admin_token_service_public.Service, permissionPublicService permission_service_public.Service, auther auth.Authable) Service {
+func New(db *gorm.DB, model admin_token_model.Model, publicService admin_token_service_public.Service, permissionPublicService permission_service_public.Service, auther auth.Authable, config admin_token_config.Config) Service {
 	return &service{
 		db:                      db,
 		model:                   model,
@@ -46,10 +48,14 @@ func New(db *gorm.DB, model admin_token_model.Model, publicService admin_token_s
 		cache:                   cache.New(5*time.Minute, 10*time.Minute),
 		permissionPublicService: permissionPublicService,
 		auther:                  auther,
+		config:                  config,
 	}
 }
 
 func (s *service) ReadTokenInfo(tokenRaw string) (*admin_token_model.Token, error) {
+	if s.config.RootToken == tokenRaw {
+		return ref.T(s.model.GenerateRootToken(tokenRaw)), nil
+	}
 	if s.IsSudoTokenValid(tokenRaw) {
 		return ref.T(s.model.GenerateSudoToken(tokenRaw)), nil
 	}
