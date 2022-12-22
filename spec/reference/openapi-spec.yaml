@@ -51,6 +51,12 @@ paths:
       x-internal: true
       security:
         - X-InternalAuthorization: []
+      parameters:
+        - schema:
+            type: boolean
+            default: false
+          in: query
+          name: include_value
     put:
       summary: Update storage
       operationId: put-admin-storage_id
@@ -119,6 +125,17 @@ paths:
               description: array of storage key
               items:
                 type: string
+          application/xml:
+            schema:
+              type: object
+              properties:
+                include_value:
+                  type: boolean
+                  default: false
+                storage_keys:
+                  type: array
+                  items:
+                    type: string
         description: ''
       security:
         - X-InternalAuthorization: []
@@ -140,6 +157,12 @@ paths:
         Need admin token which has `read` permission on `X-internalAuthorization` header.
       security:
         - X-InternalAuthorization: []
+      parameters:
+        - schema:
+            type: boolean
+            default: false
+          in: query
+          name: include_value
   /admin/storages/query:
     parameters: []
     post:
@@ -175,6 +198,9 @@ paths:
                   description: array of permission id
                   items:
                     type: string
+                include_value:
+                  type: boolean
+                  default: false
           application/xml:
             schema:
               type: object
@@ -302,7 +328,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/permissionsResponse'
-      operationId: get-admin-permissions
+      operationId: get-admin-permissions-query
       security:
         - X-InternalAuthorization: []
       requestBody:
@@ -431,27 +457,6 @@ paths:
         - X-InternalAuthorization: []
       x-internal: true
     parameters: []
-  /admin/sudo:
-    post:
-      summary: Get sudo token
-      operationId: post-admin-sudo
-      responses:
-        '200':
-          $ref: '#/components/responses/rawTokenResponse'
-      description: |-
-        Temperature get a highest permission admin token, which will expired in 5 mintues.
-        Use this token create new token by `/admin/token/xxx` apis.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                root_token:
-                  type: string
-              required:
-                - root_token
-      x-internal: true
   /admin/temp_user_token:
     get:
       summary: Admin get temp user token
