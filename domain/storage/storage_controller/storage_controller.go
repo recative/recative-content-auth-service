@@ -8,6 +8,7 @@ import (
 	"github.com/recative/recative-service-sdk/pkg/gin_context"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
+	"github.com/recative/recative-service-sdk/util/ref"
 	"gorm.io/gorm"
 )
 
@@ -34,7 +35,11 @@ func (con *controller) PostAppStorage(c *gin_context.Context[domain_definition.J
 		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
 	}
 
-	storages, err := con.service.ReadStoragesByKeysAndPermissions(body, c.Payload.Permissions)
+	if body.IsIncludeValue == nil {
+		body.IsIncludeValue = ref.T(false)
+	}
+
+	storages, err := con.service.ReadStoragesByKeysAndPermissions(body.StorageKeys, c.Payload.Permissions, *body.IsIncludeValue)
 	if err != nil {
 		response.Err(c.C, http_err.InternalServerError.Wrap(err))
 	}

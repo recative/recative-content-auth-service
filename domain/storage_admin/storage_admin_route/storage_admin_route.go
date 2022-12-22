@@ -33,8 +33,7 @@ func Init(
 
 	adminGroup.POST("/storages",
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
-		gin_context.NoSecurityHandler(storageAdminController.BatchGetStorage),
-
+		gin_context.NoSecurityHandler(storageAdminController.PostBatchGetStorage),
 	)
 	adminGroup.GET("/storages",
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
@@ -43,6 +42,6 @@ func Init(
 
 	adminGroup.POST("/storages/query",
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
-		gin_context.NoSecurityHandler(storageAdminController.GetAllStorages),
+		gin_context.NoSecurityHandler(storageAdminController.PostStoragesByQuery),
 	)
 }

@@ -7,7 +7,7 @@ import (
 )
 
 type Service interface {
-	ReadStoragesByKeysAndPermissions(keys []string, permissions []string) ([]*storage_model.Storage, error)
+	ReadStoragesByKeysAndPermissions(keys []string, permissions []string, isIncludeValue bool) ([]*storage_model.Storage, error)
 }
 
 type service struct {
@@ -22,11 +22,11 @@ func New(db *gorm.DB, model storage_model.Model) Service {
 	}
 }
 
-func (s *service) ReadStoragesByKeysAndPermissions(keys []string, permissions []string) ([]*storage_model.Storage, error) {
+func (s *service) ReadStoragesByKeysAndPermissions(keys []string, permissions []string, isIncludeValue bool) ([]*storage_model.Storage, error) {
 	res := make([]*storage_model.Storage, 0, len(keys))
 
 	for _, key := range keys {
-		storage, err := s.model.ReadStorageByKey(key)
+		storage, err := s.model.ReadStorageByKey(key, isIncludeValue)
 		if err != nil {
 			return nil, err
 		}

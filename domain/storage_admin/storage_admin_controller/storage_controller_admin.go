@@ -7,7 +7,9 @@ import (
 	"github.com/recative/recative-service-sdk/pkg/gin_context"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
+	"github.com/recative/recative-service-sdk/util/ref"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 type Controller interface {
@@ -15,7 +17,7 @@ type Controller interface {
 	PutStorageByKey(c *gin_context.NoSecurityContext)
 	DeleteStorageByKey(c *gin_context.NoSecurityContext)
 	CreateStorage(c *gin_context.NoSecurityContext)
-	BatchGetStorage(c *gin_context.NoSecurityContext)
+	PostBatchGetStorage(c *gin_context.NoSecurityContext)
 	GetAllStorages(c *gin_context.NoSecurityContext)
 	PostStoragesByQuery(c *gin_context.NoSecurityContext)
 }
@@ -36,8 +38,9 @@ func New(db *gorm.DB, service storage_admin_service.Service) Controller {
 
 func (con *controller) GetStorageByKey(c *gin_context.NoSecurityContext) {
 	storageKey := c.C.Param("storage_key")
+	isIncludeValue, _ := strconv.ParseBool(c.C.Query("include_value"))
 
-	storage, err := con.service.ReadStorageByKey(storageKey)
+	storage, err := con.service.ReadStorageByKey(storageKey, isIncludeValue)
 	if err != nil {
 		response.Err(c.C, err)
 		return
@@ -98,7 +101,7 @@ func (con *controller) CreateStorage(c *gin_context.NoSecurityContext) {
 	response.Ok(c.C, nil)
 }
 
-func (con *controller) BatchGetStorage(c *gin_context.NoSecurityContext) {
+func (con *controller) PostBatchGetStorage(c *gin_context.NoSecurityContext) {
 	var body spec.PostAdminStoragesJSONRequestBody
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {
@@ -106,7 +109,11 @@ func (con *controller) BatchGetStorage(c *gin_context.NoSecurityContext) {
 		return
 	}
 
-	storages, err := con.service.ReadStoragesByKeys(body)
+	if body.IncludeValue == nil {
+		body.IncludeValue = ref.T(false)
+	}
+
+	storages, err := con.service.ReadStoragesByKeys(body.StorageKeys, *body.IncludeValue)
 	if err != nil {
 		response.Err(c.C, err)
 		return
@@ -119,7 +126,9 @@ func (con *controller) BatchGetStorage(c *gin_context.NoSecurityContext) {
 }
 
 func (con *controller) GetAllStorages(c *gin_context.NoSecurityContext) {
-	storages, err := con.service.ReadAllStorages()
+	isIncludeValue, _ := strconv.ParseBool(c.C.Query("include_value"))
+
+	storages, err := con.service.ReadAllStorages(isIncludeValue)
 	if err != nil {
 		response.Err(c.C, err)
 		return
@@ -139,7 +148,11 @@ func (con *controller) PostStoragesByQuery(c *gin_context.NoSecurityContext) {
 		return
 	}
 
-	storages, err := con.service.ReadStoragesByQuery(*body.IncludePermission, *body.ExcludePermission)
+	if body.IncludeValue == nil {
+		body.IncludeValue = ref.T(false)
+	}
+
+	storages, err := con.service.ReadStoragesByQuery(body.IncludePermission, body.ExcludePermission, *body.IncludeValue)
 	if err != nil {
 		response.Err(c.C, err)
 		return

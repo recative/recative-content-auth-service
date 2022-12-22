@@ -11,12 +11,12 @@ import (
 type StorageModel interface {
 	CreateStorage(storageParams StorageParams) error
 	UpdateStorageByKey(key string, storageParams StorageParams) error
-	ReadStorageByKey(key string) (*Storage, error)
-	ReadStorageByKeys(key []string) ([]*Storage, error)
-	ReadAllStorage() ([]*Storage, error)
+	ReadStorageByKey(key string, isIncludeValue bool) (*Storage, error)
+	ReadStorageByKeys(key []string, isIncludeValue bool) ([]*Storage, error)
+	ReadAllStorage(isIncludeValue bool) ([]*Storage, error)
 	DeleteStorageByKey(key string) (*Storage, error)
 	IsExistStorageByKey(key string) (bool, error)
-	ReadStoragesByQuery(excludePermission, includePermission []string) ([]*Storage, error)
+	ReadStoragesByQuery(excludePermission, includePermission []string, isIncludeValue bool) ([]*Storage, error)
 }
 
 type Storage struct {
@@ -27,6 +27,25 @@ type Storage struct {
 	StorageId string `gorm:"primaryKey;not null;uniqueIndex"`
 
 	StorageParams `gorm:"embedded"`
+}
+
+func isIncludeValue(isIncludeValue bool) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if !isIncludeValue {
+			return db.Model(&Storage{}).Select([]string{
+				"created_at",
+				"updated_at",
+				"deleted_at",
+				"storage_id",
+				"key",
+				"need_permissions",
+				"need_permission_count",
+				"comment",
+			})
+		} else {
+			return db.Model(&Storage{})
+		}
+	}
 }
 
 type StorageParams struct {
@@ -62,27 +81,28 @@ func (m *model) UpdateStorageByKey(key string, storageParams StorageParams) erro
 	return nil
 }
 
-func (m *model) ReadStorageByKey(key string) (*Storage, error) {
+func (m *model) ReadStorageByKey(key string, isIncludeValue_ bool) (*Storage, error) {
 	var storage Storage
-	err := m.db.Where("key = ?", key).First(&storage).Error
+
+	err := m.db.Scopes(isIncludeValue(isIncludeValue_)).Where("key = ?", key).First(&storage).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
 	return &storage, nil
 }
 
-func (m *model) ReadStorageByKeys(key []string) ([]*Storage, error) {
+func (m *model) ReadStorageByKeys(key []string, isIncludeValue_ bool) ([]*Storage, error) {
 	var storages []*Storage
-	err := m.db.Where("key IN ?", key).Find(&storages).Error
+	err := m.db.Scopes(isIncludeValue(isIncludeValue_)).Where("key IN ?", key).Find(&storages).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
 	return storages, nil
 }
 
-func (m *model) ReadAllStorage() ([]*Storage, error) {
+func (m *model) ReadAllStorage(isIncludeValue_ bool) ([]*Storage, error) {
 	var storages []*Storage
-	err := m.db.Find(&storages).Error
+	err := m.db.Scopes(isIncludeValue(isIncludeValue_)).Find(&storages).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}
@@ -110,9 +130,9 @@ func (m *model) IsExistStorageByKey(key string) (bool, error) {
 	return true, nil
 }
 
-func (m *model) ReadStoragesByQuery(excludePermission, includePermission []string) ([]*Storage, error) {
+func (m *model) ReadStoragesByQuery(excludePermission, includePermission []string, isIncludeValue_ bool) ([]*Storage, error) {
 	var storages []*Storage
-	err := m.db.Where("need_permissions && ?", pq.StringArray(excludePermission)).Not("need_permissions && ?", pq.StringArray(includePermission)).Find(&storages).Error
+	err := m.db.Scopes(isIncludeValue(isIncludeValue_)).Where("need_permissions && ?", pq.StringArray(excludePermission)).Not("need_permissions && ?", pq.StringArray(includePermission)).Find(&storages).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}

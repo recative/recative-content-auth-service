@@ -25,9 +25,17 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                type: string
+              type: object
+              properties:
+                storage_keys:
+                  type: array
+                  items:
+                    type: string
+                is_include_value:
+                  type: boolean
+                  default: false
+              required:
+                - storage_keys
         description: ''
       x-internal: false
   '/admin/storage/{storage_key}':
@@ -121,12 +129,6 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              description: array of storage key
-              items:
-                type: string
-          application/xml:
-            schema:
               type: object
               properties:
                 include_value:
@@ -136,6 +138,8 @@ paths:
                   type: array
                   items:
                     type: string
+              required:
+                - storage_keys
         description: ''
       security:
         - X-InternalAuthorization: []
@@ -201,6 +205,9 @@ paths:
                 include_value:
                   type: boolean
                   default: false
+              required:
+                - include_permission
+                - exclude_permission
           application/xml:
             schema:
               type: object
