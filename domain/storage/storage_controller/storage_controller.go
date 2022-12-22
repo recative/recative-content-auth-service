@@ -35,11 +35,11 @@ func (con *controller) PostAppStorage(c *gin_context.Context[domain_definition.J
 		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
 	}
 
-	if body.IsIncludeValue == nil {
-		body.IsIncludeValue = ref.T(false)
+	if body.IncludeValue == nil {
+		body.IncludeValue = ref.T(false)
 	}
 
-	storages, err := con.service.ReadStoragesByKeysAndPermissions(body.StorageKeys, c.Payload.Permissions, *body.IsIncludeValue)
+	storages, err := con.service.ReadStoragesByKeysAndPermissions(body.StorageKeys, c.Payload.Permissions, *body.IncludeValue)
 	if err != nil {
 		response.Err(c.C, http_err.InternalServerError.Wrap(err))
 	}

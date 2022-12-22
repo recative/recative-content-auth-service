@@ -31,7 +31,7 @@ paths:
                   type: array
                   items:
                     type: string
-                is_include_value:
+                include_value:
                   type: boolean
                   default: false
               required:
