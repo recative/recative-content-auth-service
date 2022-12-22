@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { SudoFetcher } from "../src/fetcher/authFetcher";
+import { RootFetcher } from "../src/fetcher/authFetcher";
 
 describe("admin token crud", () => {
     const payload = {
@@ -11,7 +11,7 @@ describe("admin token crud", () => {
         let date = new Date()
         // add 5 days
         date.setDate(date.getDate() + 5)
-        const resp = await SudoFetcher.path('/admin/token').method('post').create()({
+        const resp = await RootFetcher.path('/admin/token').method('post').create()({
             is_valid:true,
             comment:"a token for test",
             admin_permission: ["write"],
@@ -24,7 +24,7 @@ describe("admin token crud", () => {
     });
 
     it('get admin token info', async () => {
-        const resp = await SudoFetcher.path('/admin/token/{token}').method('get').create()({
+        const resp = await RootFetcher.path('/admin/token/{token}').method('get').create()({
             token: payload.token,
         })
 
@@ -34,7 +34,7 @@ describe("admin token crud", () => {
     });
 
     it('update admin token', async () => {
-        const resp = await SudoFetcher.path('/admin/token/{token}').method('put').create()({
+        const resp = await RootFetcher.path('/admin/token/{token}').method('put').create()({
             token: payload.token,
             is_valid: false,
             comment: "a token for test",
@@ -45,7 +45,7 @@ describe("admin token crud", () => {
         expect (resp.ok).toBe(true)
         expect (resp.data).matchSnapshot()
 
-        const resp2 = await SudoFetcher.path('/admin/token/{token}').method('get').create()({
+        const resp2 = await RootFetcher.path('/admin/token/{token}').method('get').create()({
             token: payload.token,
         })
 
@@ -55,7 +55,7 @@ describe("admin token crud", () => {
     })
 
     it('delete token', async () => {
-        const resp = await SudoFetcher.path('/admin/token/{token}').method('delete').create()({
+        const resp = await RootFetcher.path('/admin/token/{token}').method('delete').create()({
             token: payload.token,
         })
 
@@ -64,7 +64,7 @@ describe("admin token crud", () => {
     });
 
     it('get all tokens', async () => {
-        const resp = await SudoFetcher.path('/admin/tokens').method('get').create()({})
+        const resp = await RootFetcher.path('/admin/tokens').method('get').create()({})
 
         expect (resp.ok).toBe(true)
         const data = resp.data.map((item) => {

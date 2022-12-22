@@ -1,7 +1,0 @@
-// Vitest Snapshot v1
-
-exports[`admin token crud > create admin token 1`] = `
-{
-  "token": "46f3345a-88a1-4524-a377-ca56963a82c2",
-}
-`;

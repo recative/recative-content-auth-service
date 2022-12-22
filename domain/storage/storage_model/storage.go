@@ -22,7 +22,6 @@ type StorageModel interface {
 type Storage struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
 
 	StorageId string `gorm:"primaryKey;not null;uniqueIndex"`
 
@@ -35,7 +34,6 @@ func isIncludeValue(isIncludeValue bool) func(db *gorm.DB) *gorm.DB {
 			return db.Model(&Storage{}).Select([]string{
 				"created_at",
 				"updated_at",
-				"deleted_at",
 				"storage_id",
 				"key",
 				"need_permissions",

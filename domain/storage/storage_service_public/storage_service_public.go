@@ -31,6 +31,7 @@ func (s *service) ReadStoragesByKeysAndPermissions(keys []string, permissions []
 			return nil, err
 		}
 
+		// TODO: check permission
 		if lo.Every(permissions, storage.NeedPermissions) {
 			res = append(res, storage)
 		}

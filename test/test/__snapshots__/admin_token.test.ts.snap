@@ -44,16 +44,6 @@ exports[`admin token crud > get all tokens 1`] = `
     "token": "114514",
     "type": "admin",
   },
-  {
-    "admin_permission": [
-      "write",
-    ],
-    "comment": "a token for test",
-    "expired_at": undefined,
-    "is_valid": true,
-    "token": "46f3345a-88a1-4524-a377-ca56963a82c2",
-    "type": "admin",
-  },
 ]
 `;
 

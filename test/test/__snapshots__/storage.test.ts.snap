@@ -1,7 +1,107 @@
 // Vitest Snapshot v1
 
-exports[`admin token crud > create admin token 1`] = `
+exports[`storage crud > create storage 1`] = `undefined`;
+
+exports[`storage crud > delete storage 1`] = `undefined`;
+
+exports[`storage crud > get all storages 1`] = `
+[
+  {
+    "comment": "test1",
+    "key": "a",
+    "need_permission_count": 2,
+    "need_permissions": [
+      "test_permission_1",
+      "test_permission_2",
+    ],
+    "value": "",
+  },
+  {
+    "comment": "test2",
+    "key": "aa",
+    "need_permission_count": 2,
+    "need_permissions": [
+      "test_permission_1",
+      "test_permission_2",
+    ],
+    "value": "",
+  },
+]
+`;
+
+exports[`storage crud > get storage 1`] = `
 {
-  "token": "b37adb2c-5ba5-40e8-9b12-34374bf8fdf2",
+  "comment": "???",
+  "key": "114514",
+  "need_permission_count": 1,
+  "need_permissions": [
+    "test_permission_1",
+  ],
+  "value": "",
+}
+`;
+
+exports[`storage crud > get storages by key exclude value 1`] = `
+[
+  {
+    "comment": "test1",
+    "key": "a",
+    "need_permission_count": 2,
+    "need_permissions": [
+      "test_permission_1",
+      "test_permission_2",
+    ],
+    "value": "",
+  },
+  {
+    "comment": "test2",
+    "key": "aa",
+    "need_permission_count": 2,
+    "need_permissions": [
+      "test_permission_1",
+      "test_permission_2",
+    ],
+    "value": "",
+  },
+]
+`;
+
+exports[`storage crud > get storages by key include value 1`] = `
+[
+  {
+    "comment": "test1",
+    "key": "a",
+    "need_permission_count": 2,
+    "need_permissions": [
+      "test_permission_1",
+      "test_permission_2",
+    ],
+    "value": "b",
+  },
+  {
+    "comment": "test2",
+    "key": "aa",
+    "need_permission_count": 2,
+    "need_permissions": [
+      "test_permission_1",
+      "test_permission_2",
+    ],
+    "value": "bb",
+  },
+]
+`;
+
+exports[`storage crud > update storage 1`] = `undefined`;
+
+exports[`storage crud > update storage 2`] = `
+{
+  "comment": "???",
+  "key": "114514",
+  "need_permission_count": 2,
+  "need_permissions": [
+    "test_permission_1",
+    "test_permission_2",
+  ],
+  "value": "",
 }
 `;

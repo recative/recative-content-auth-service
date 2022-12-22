@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { SudoFetcher } from "../src/fetcher/authFetcher";
+import { RootFetcher } from "../src/fetcher/authFetcher";
 import exp from "constants";
 
 describe("permission crud", () => {
     it('create permission', async () => {
-        const resp = await SudoFetcher.path('/admin/permission').method('post').create()({
+        const resp = await RootFetcher.path('/admin/permission').method('post').create()({
            id: "test_permission",
            comment: "a permission for test",
        })
@@ -15,7 +15,7 @@ describe("permission crud", () => {
     });
 
     it('get permission info', async () => {
-        const resp = await SudoFetcher.path('/admin/permission/{permission_id}').method('get').create()({
+        const resp = await RootFetcher.path('/admin/permission/{permission_id}').method('get').create()({
             permission_id: "test_permission",
         })
 
@@ -24,7 +24,7 @@ describe("permission crud", () => {
     });
 
     it('modify permission info', async () => {
-        let resp = await SudoFetcher.path('/admin/permission/{permission_id}').method('put').create()({
+        let resp = await RootFetcher.path('/admin/permission/{permission_id}').method('put').create()({
             permission_id:"test_permission",
             id: "test_permission",
             comment: "after modify",
@@ -33,7 +33,7 @@ describe("permission crud", () => {
         expect (resp.ok).toBe(true)
         expect (resp.data).matchSnapshot()
 
-        resp = await SudoFetcher.path('/admin/permission/{permission_id}').method('get').create()({
+        resp = await RootFetcher.path('/admin/permission/{permission_id}').method('get').create()({
             permission_id: "test_permission",
         })
 
@@ -42,7 +42,7 @@ describe("permission crud", () => {
     });
 
     it('delete permission', async () => {
-        const resp = await SudoFetcher.path('/admin/permission/{permission_id}').method('delete').create()({
+        const resp = await RootFetcher.path('/admin/permission/{permission_id}').method('delete').create()({
             permission_id: "test_permission",
         })
 
@@ -51,14 +51,14 @@ describe("permission crud", () => {
     })
 
     it('get all permissions', async () => {
-        const resp = await SudoFetcher.path('/admin/permissions').method('get').create()({})
+        const resp = await RootFetcher.path('/admin/permissions').method('get').create()({})
 
         expect (resp.ok).toBe(true)
         expect (resp.data).matchSnapshot()
     })
 
     it('batch get permissions', async () => {
-        const resp = await SudoFetcher.path('/admin/permissions').method('post').create()([
+        const resp = await RootFetcher.path('/admin/permissions').method('post').create()([
             "test_permission_1",
             "test_permission_2",
         ])
@@ -69,7 +69,7 @@ describe("permission crud", () => {
     })
 
     it('query permissions', async () => {
-        const resp = await SudoFetcher.path('/admin/permissions/query').method('post').create()({
+        const resp = await RootFetcher.path('/admin/permissions/query').method('post').create()({
             regex:"test_permission_.*",
         })
 

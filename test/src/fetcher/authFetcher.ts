@@ -22,8 +22,8 @@ const InternalFetcher = (XInternalAuthorization: string) => {
   return internalFetcher;
 };
 
-export const SudoFetcher = InternalFetcher(
-  env.SUDO_TOKEN,
+export const RootFetcher = InternalFetcher(
+  env.ROOT_TOKEN,
 );
 
 export const ReadFetcher = InternalFetcher(
