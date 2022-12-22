@@ -132,7 +132,7 @@ func (con *controller) GetAllPermissions(c *gin_context.NoSecurityContext) {
 }
 
 func (con *controller) PostGetPermissionByQuery(c *gin_context.NoSecurityContext) {
-	var body spec.GetAdminPermissionsJSONBody
+	var body spec.GetAdminPermissionsQueryJSONBody
 	err := c.C.ShouldBindJSON(&body)
 	if err != nil {
 		response.Err(c.C, http_err.InvalidArgument.Wrap(err))

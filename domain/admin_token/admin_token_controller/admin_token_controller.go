@@ -25,7 +25,7 @@ type Controller interface {
 	GetTempToken(c *gin_context.NoSecurityContext)
 	PostTempToken(c *gin_context.NoSecurityContext)
 	CheckAdminTokenPermission(needPermissions ...string) func(c *gin_context.NoSecurityContext)
-	CheckRootToken() func(c *gin_context.NoSecurityContext)
+	//CheckRootToken() func(c *gin_context.NoSecurityContext)
 }
 
 type controller struct {
@@ -214,7 +214,7 @@ func (con *controller) PostTempToken(c *gin_context.NoSecurityContext) {
 func (con *controller) CheckAdminTokenPermission(needPermissions ...string) func(c *gin_context.NoSecurityContext) {
 	return func(c *gin_context.NoSecurityContext) {
 		internalAuthorizationToken := c.C.GetHeader("X-InternalAuthorization")
-		if con.service.IsSudoTokenValid(internalAuthorizationToken) {
+		if con.config.RootToken == internalAuthorizationToken {
 			return
 		}
 		ok := con.service.IsTokenExist(internalAuthorizationToken)
@@ -239,21 +239,21 @@ func (con *controller) CheckAdminTokenPermission(needPermissions ...string) func
 	}
 }
 
-func (con *controller) CheckRootToken() func(c *gin_context.NoSecurityContext) {
-	return func(c *gin_context.NoSecurityContext) {
-		var body spec.PostAdminSudoJSONBody
-		err := c.C.ShouldBindJSON(&body)
-		if err != nil {
-			response.Err(c.C, http_err.InvalidArgument.Wrap(err))
-			return
-		}
-
-		if body.RootToken != con.config.RootToken {
-			response.Err(c.C, http_err.Unauthorized.New("root token in request body is invalid"))
-			return
-		}
-
-		c.C.Next()
-		return
-	}
-}
+//func (con *controller) CheckRootToken() func(c *gin_context.NoSecurityContext) {
+//	return func(c *gin_context.NoSecurityContext) {
+//		var body spec.PostAdminSudoJSONBody
+//		err := c.C.ShouldBindJSON(&body)
+//		if err != nil {
+//			response.Err(c.C, http_err.InvalidArgument.Wrap(err))
+//			return
+//		}
+//
+//		if body.RootToken != con.config.RootToken {
+//			response.Err(c.C, http_err.Unauthorized.New("root token in request body is invalid"))
+//			return
+//		}
+//
+//		c.C.Next()
+//		return
+//	}
+//}
