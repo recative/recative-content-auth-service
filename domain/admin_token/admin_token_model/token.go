@@ -14,7 +14,7 @@ type TokenModel interface {
 	DeleteTokenByRaw(tokenRaw string) error
 	CreateToken(param TokenParam) (token Token, err error)
 	ReadAllTokens() (token []Token, err error)
-	ReadSelectTokens(tokenRaws []string) (token []Token, err error)
+	ReadTokensByQuery(tokenRaws []string) (token []Token, err error)
 	IsTokenExist(token string) bool
 	GenerateSudoToken(sudoToken string) (token Token)
 	GenerateRootToken(rootToken string) (token Token)
@@ -111,8 +111,13 @@ func (m *model) ReadAllTokens() (token []Token, err error) {
 	return token, nil
 }
 
-func (m *model) ReadSelectTokens(tokenRaws []string) (token []Token, err error) {
-	err = m.db.Where("raw IN ?", tokenRaws).Find(&token).Error
+func (m *model) ReadTokensByQuery(tokenRaws []string) (token []Token, err error) {
+	var db = m.db
+	if len(tokenRaws) > 0 {
+		db = db.Where("raw IN ?", tokenRaws)
+	}
+
+	err = db.Find(&token).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}

@@ -1,18 +1,5 @@
 // Vitest Snapshot v1
 
-exports[`permission crud > batch get permissions 1`] = `
-[
-  {
-    "comment": "this is test permission",
-    "id": "test_permission_1",
-  },
-  {
-    "comment": "this is test permission",
-    "id": "test_permission_2",
-  },
-]
-`;
-
 exports[`permission crud > create permission 1`] = `undefined`;
 
 exports[`permission crud > delete permission 1`] = `undefined`;
@@ -44,17 +31,4 @@ exports[`permission crud > modify permission info 2`] = `
   "comment": "after modify",
   "id": "test_permission",
 }
-`;
-
-exports[`permission crud > query permissions 1`] = `
-[
-  {
-    "comment": "this is test permission",
-    "id": "test_permission_1",
-  },
-  {
-    "comment": "this is test permission",
-    "id": "test_permission_2",
-  },
-]
 `;

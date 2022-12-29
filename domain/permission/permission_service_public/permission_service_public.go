@@ -13,7 +13,7 @@ type Service interface {
 	CreatePermission(params permission_model.PermissionParams) error
 	ReadPermissionsByKeys(keys []string) ([]*permission_model.Permission, error)
 	ReadAllPermissions() ([]*permission_model.Permission, error)
-	ReadPermissionsByRegexQuery(regex string) ([]*permission_model.Permission, error)
+	ReadPermissionsByQuery(ids []string, regex string) ([]*permission_model.Permission, error)
 	IsPermissionsExist([]string) ([]string, bool)
 }
 
@@ -57,10 +57,10 @@ func (s *service) IsPermissionsExist(permissionIds []string) ([]string, bool) {
 	return s.model.IsPermissionsExist(permissionIds)
 }
 
-func (s *service) ReadPermissionsByRegexQuery(regex string) ([]*permission_model.Permission, error) {
+func (s *service) ReadPermissionsByQuery(ids []string, regex string) ([]*permission_model.Permission, error) {
 	_, err := regexp.Compile(regex)
 	if err != nil {
 		return nil, err
 	}
-	return s.model.ReadPermissionByRegexQuery(regex)
+	return s.model.ReadPermissionByQuery(ids, regex)
 }

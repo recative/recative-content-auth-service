@@ -24,12 +24,12 @@ func Init(adminGroup *gin.RouterGroup, adminTokenController admin_token_controll
 	)
 	adminGroup.GET("/tokens",
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("sudo")),
-		gin_context.NoSecurityHandler(adminTokenController.GetAllTokens),
+		gin_context.NoSecurityHandler(adminTokenController.GetTokensByQuery),
 	)
-	adminGroup.POST("/tokens",
-		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("sudo")),
-		gin_context.NoSecurityHandler(adminTokenController.GetSelectTokens),
-	)
+	//adminGroup.POST("/tokens",
+	//	gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("sudo")),
+	//	gin_context.NoSecurityHandler(adminTokenController.GetSelectTokens),
+	//)
 
 	//adminGroup.POST("/sudo",
 	//	gin_context.NoSecurityHandler(adminTokenController.CheckRootToken()),

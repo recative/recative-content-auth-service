@@ -29,12 +29,12 @@ func Init(adminGroup *gin.RouterGroup, permissionController permission_controlle
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("read")),
 		gin_context.NoSecurityHandler(permissionController.GetAllPermissions),
 	)
-	adminGroup.POST("/permissions",
-		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("read")),
-		gin_context.NoSecurityHandler(permissionController.BatchGetPermission),
-	)
-	adminGroup.POST("/permissions/query",
-		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("read")),
-		gin_context.NoSecurityHandler(permissionController.PostGetPermissionByQuery),
-	)
+	//adminGroup.POST("/permissions",
+	//	gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("read")),
+	//	gin_context.NoSecurityHandler(permissionController.BatchGetPermission),
+	//)
+	//adminGroup.POST("/permissions/query",
+	//	gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission("read")),
+	//	gin_context.NoSecurityHandler(permissionController.PostGetPermissionByQuery),
+	//)
 }

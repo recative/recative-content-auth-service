@@ -10,7 +10,7 @@ type PermissionModel interface {
 	ReadPermissionsByKeys(keys []string) ([]*Permission, error)
 	ReadAllPermissions() ([]*Permission, error)
 	IsPermissionsExist([]string) ([]string, bool)
-	ReadPermissionByRegexQuery(query string) ([]*Permission, error)
+	ReadPermissionByQuery(ids []string, query string) ([]*Permission, error)
 }
 
 type Permission struct {
@@ -107,9 +107,17 @@ func (m *model) IsPermissionsExist(permissionIds []string) (miss []string, ok bo
 	return nil, true
 }
 
-func (m *model) ReadPermissionByRegexQuery(query string) ([]*Permission, error) {
+func (m *model) ReadPermissionByQuery(ids []string, query string) ([]*Permission, error) {
 	var permissions []*Permission
-	err := m.db.Where("id ~* ?", query).Find(&permissions).Error
+	var db = m.db
+	if len(ids) > 0 {
+		db = db.Where("id IN ?", ids)
+	}
+	if query != "" {
+		db = db.Where("id ~* ?", query)
+	}
+
+	err := db.Find(&permissions).Error
 	if err != nil {
 		return nil, db_err.Wrap(err)
 	}

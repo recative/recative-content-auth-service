@@ -21,6 +21,7 @@ func Init(
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
 		gin_context.NoSecurityHandler(storageAdminController.PutStorageByKey),
 	)
+
 	adminGroup.DELETE("/storage/:storage_key",
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
 		gin_context.NoSecurityHandler(storageAdminController.DeleteStorageByKey),
@@ -31,17 +32,18 @@ func Init(
 		gin_context.NoSecurityHandler(storageAdminController.CreateStorage),
 	)
 
-	adminGroup.POST("/storages",
-		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
-		gin_context.NoSecurityHandler(storageAdminController.PostBatchGetStorage),
-	)
+	//adminGroup.POST("/storages",
+	//	gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
+	//	gin_context.NoSecurityHandler(storageAdminController.PostBatchGetStorage),
+	//)
+
 	adminGroup.GET("/storages",
 		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
-		gin_context.NoSecurityHandler(storageAdminController.GetAllStorages),
+		gin_context.NoSecurityHandler(storageAdminController.GetStoragesByQuery),
 	)
 
-	adminGroup.POST("/storages/query",
-		gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
-		gin_context.NoSecurityHandler(storageAdminController.PostStoragesByQuery),
-	)
+	//adminGroup.POST("/storages/query",
+	//	gin_context.NoSecurityHandler(adminTokenController.CheckAdminTokenPermission()),
+	//	gin_context.NoSecurityHandler(storageAdminController.PostStoragesByQuery),
+	//)
 }

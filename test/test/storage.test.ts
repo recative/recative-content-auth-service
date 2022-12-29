@@ -54,27 +54,12 @@ describe("storage crud", () => {
         expect (resp.data).matchSnapshot()
     });
 
-    it('get all storages', async () => {
-        const resp = await RootFetcher.path('/admin/storages').method('get').create()({})
-
-        expect (resp.ok).toBe(true)
-        expect (resp.data).matchSnapshot()
-    })
-
-    it('get storages by key include value',async () => {
-        const resp = await RootFetcher.path('/admin/storages').method('post').create()({
+    it('get storages by query', async () => {
+        const resp = await RootFetcher.path('/admin/storages').method('get').create()({
             include_value:true,
-            storage_keys:["a","aa"]
-        })
-
-        expect (resp.ok).toBe(true)
-        expect (resp.data).matchSnapshot()
-    })
-
-    it('get storages by key exclude value',async () => {
-        const resp = await RootFetcher.path('/admin/storages').method('post').create()({
-            include_value:false,
-            storage_keys:["a","aa"]
+            exclude_permission:"",
+            include_permission:"test_permission_1",
+            keys:"a,aa"
         })
 
         expect (resp.ok).toBe(true)

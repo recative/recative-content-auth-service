@@ -10,7 +10,6 @@ import (
 	"github.com/recative/recative-backend/domain/permission/permission_service_public"
 	"github.com/recative/recative-service-sdk/pkg/auth"
 	"github.com/recative/recative-service-sdk/util/ref"
-	"github.com/samber/lo"
 	"gorm.io/gorm"
 	"time"
 )
@@ -21,8 +20,8 @@ type Service interface {
 	UpdateTokenInfo(tokenRaw string, param admin_token_model.TokenParam) error
 	DeleteToken(tokenRaw string) error
 	CreateToken(param admin_token_model.TokenParam) (token admin_token_model.Token, err error)
-	ReadAllTokens() (token []admin_token_model.Token, err error)
-	ReadSelectTokens(tokenRaws []string) (token []admin_token_model.Token, err error)
+	ReadTokensByQuery(ids []string) (token []admin_token_model.Token, err error)
+	//ReadSelectTokens(tokenRaws []string) (token []admin_token_model.Token, err error)
 	CreateSudoToken() (sudoToken string, err error)
 	IsTokenExist(token string) bool
 	IsSudoTokenValid(token string) bool
@@ -74,17 +73,10 @@ func (s *service) CreateToken(param admin_token_model.TokenParam) (token admin_t
 	return s.model.CreateToken(param)
 }
 
-func (s *service) ReadAllTokens() (token []admin_token_model.Token, err error) {
-	return s.model.ReadAllTokens()
-}
+func (s *service) ReadTokensByQuery(ids []string) (token []admin_token_model.Token, err error) {
+	var res = make([]admin_token_model.Token, 0, len(ids))
 
-func (s *service) ReadSelectTokens(tokenRaws []string) (token []admin_token_model.Token, err error) {
-	var res = make([]admin_token_model.Token, 0, len(tokenRaws))
-	sudoToken, isExist := s.GetSudoToken()
-	if isExist && lo.Contains(tokenRaws, sudoToken) {
-		res = append(res, s.model.GenerateSudoToken(sudoToken))
-	}
-	tokens, err := s.model.ReadSelectTokens(tokenRaws)
+	tokens, err := s.model.ReadTokensByQuery(ids)
 	if err != nil {
 		return nil, err
 	}
@@ -92,6 +84,21 @@ func (s *service) ReadSelectTokens(tokenRaws []string) (token []admin_token_mode
 	res = append(res, tokens...)
 	return res, nil
 }
+
+//func (s *service) ReadSelectTokens(tokenRaws []string) (token []admin_token_model.Token, err error) {
+//	var res = make([]admin_token_model.Token, 0, len(tokenRaws))
+//	sudoToken, isExist := s.GetSudoToken()
+//	if isExist && lo.Contains(tokenRaws, sudoToken) {
+//		res = append(res, s.model.GenerateSudoToken(sudoToken))
+//	}
+//	tokens, err := s.model.ReadSelectTokens(tokenRaws)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	res = append(res, tokens...)
+//	return res, nil
+//}
 
 const SudoToken = "sudo-token"
 

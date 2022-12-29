@@ -7,9 +7,9 @@ import (
 	"github.com/recative/recative-service-sdk/pkg/gin_context"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
-	"github.com/recative/recative-service-sdk/util/ref"
 	"gorm.io/gorm"
 	"strconv"
+	"strings"
 )
 
 type Controller interface {
@@ -17,9 +17,9 @@ type Controller interface {
 	PutStorageByKey(c *gin_context.NoSecurityContext)
 	DeleteStorageByKey(c *gin_context.NoSecurityContext)
 	CreateStorage(c *gin_context.NoSecurityContext)
-	PostBatchGetStorage(c *gin_context.NoSecurityContext)
-	GetAllStorages(c *gin_context.NoSecurityContext)
-	PostStoragesByQuery(c *gin_context.NoSecurityContext)
+	//PostBatchGetStorage(c *gin_context.NoSecurityContext)
+	GetStoragesByQuery(c *gin_context.NoSecurityContext)
+	//PostStoragesByQuery(c *gin_context.NoSecurityContext)
 }
 
 type controller struct {
@@ -101,34 +101,37 @@ func (con *controller) CreateStorage(c *gin_context.NoSecurityContext) {
 	response.Ok(c.C, nil)
 }
 
-func (con *controller) PostBatchGetStorage(c *gin_context.NoSecurityContext) {
-	var body spec.PostAdminStoragesJSONRequestBody
-	err := c.C.ShouldBindJSON(&body)
-	if err != nil {
-		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
-		return
-	}
+//func (con *controller) PostBatchGetStorage(c *gin_context.NoSecurityContext) {
+//	var body spec.PostAdminStoragesJSONRequestBody
+//	err := c.C.ShouldBindJSON(&body)
+//	if err != nil {
+//		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
+//		return
+//	}
+//
+//	if body.IncludeValue == nil {
+//		body.IncludeValue = ref.T(false)
+//	}
+//
+//	storages, err := con.service.ReadStoragesByKeys(body.StorageKeys, *body.IncludeValue)
+//	if err != nil {
+//		response.Err(c.C, err)
+//		return
+//	}
+//
+//	var res []spec.StorageResponse
+//	res = storage_format.StoragesToResponse(storages)
+//	response.Ok(c.C, res)
+//	return
+//}
 
-	if body.IncludeValue == nil {
-		body.IncludeValue = ref.T(false)
-	}
-
-	storages, err := con.service.ReadStoragesByKeys(body.StorageKeys, *body.IncludeValue)
-	if err != nil {
-		response.Err(c.C, err)
-		return
-	}
-
-	var res []spec.StorageResponse
-	res = storage_format.StoragesToResponse(storages)
-	response.Ok(c.C, res)
-	return
-}
-
-func (con *controller) GetAllStorages(c *gin_context.NoSecurityContext) {
+func (con *controller) GetStoragesByQuery(c *gin_context.NoSecurityContext) {
+	includePermission := strings.Split(c.C.Query("include_permission"), ",")
+	excludePermission := strings.Split(c.C.Query("exclude_permission"), ",")
+	keys := strings.Split(c.C.Query("keys"), ",")
 	isIncludeValue, _ := strconv.ParseBool(c.C.Query("include_value"))
 
-	storages, err := con.service.ReadAllStorages(isIncludeValue)
+	storages, err := con.service.ReadStoragesByQuery(keys, excludePermission, includePermission, isIncludeValue)
 	if err != nil {
 		response.Err(c.C, err)
 		return
@@ -140,26 +143,26 @@ func (con *controller) GetAllStorages(c *gin_context.NoSecurityContext) {
 	return
 }
 
-func (con *controller) PostStoragesByQuery(c *gin_context.NoSecurityContext) {
-	var body spec.PostAdminStoragesQueryJSONBody
-	err := c.C.ShouldBindQuery(&body)
-	if err != nil {
-		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
-		return
-	}
-
-	if body.IncludeValue == nil {
-		body.IncludeValue = ref.T(false)
-	}
-
-	storages, err := con.service.ReadStoragesByQuery(body.IncludePermission, body.ExcludePermission, *body.IncludeValue)
-	if err != nil {
-		response.Err(c.C, err)
-		return
-	}
-
-	var res []spec.StorageResponse
-	res = storage_format.StoragesToResponse(storages)
-	response.Ok(c.C, res)
-	return
-}
+//func (con *controller) PostStoragesByQuery(c *gin_context.NoSecurityContext) {
+//	var body spec.PostAdminStoragesQueryJSONBody
+//	err := c.C.ShouldBindQuery(&body)
+//	if err != nil {
+//		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
+//		return
+//	}
+//
+//	if body.IncludeValue == nil {
+//		body.IncludeValue = ref.T(false)
+//	}
+//
+//	storages, err := con.service.ReadStoragesByQuery(body.IncludePermission, body.ExcludePermission, *body.IncludeValue)
+//	if err != nil {
+//		response.Err(c.C, err)
+//		return
+//	}
+//
+//	var res []spec.StorageResponse
+//	res = storage_format.StoragesToResponse(storages)
+//	response.Ok(c.C, res)
+//	return
+//}

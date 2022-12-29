@@ -4,31 +4,6 @@ exports[`storage crud > create storage 1`] = `undefined`;
 
 exports[`storage crud > delete storage 1`] = `undefined`;
 
-exports[`storage crud > get all storages 1`] = `
-[
-  {
-    "comment": "test1",
-    "key": "a",
-    "need_permission_count": 2,
-    "need_permissions": [
-      "test_permission_1",
-      "test_permission_2",
-    ],
-    "value": "",
-  },
-  {
-    "comment": "test2",
-    "key": "aa",
-    "need_permission_count": 2,
-    "need_permissions": [
-      "test_permission_1",
-      "test_permission_2",
-    ],
-    "value": "",
-  },
-]
-`;
-
 exports[`storage crud > get storage 1`] = `
 {
   "comment": "???",
@@ -41,32 +16,7 @@ exports[`storage crud > get storage 1`] = `
 }
 `;
 
-exports[`storage crud > get storages by key exclude value 1`] = `
-[
-  {
-    "comment": "test1",
-    "key": "a",
-    "need_permission_count": 2,
-    "need_permissions": [
-      "test_permission_1",
-      "test_permission_2",
-    ],
-    "value": "",
-  },
-  {
-    "comment": "test2",
-    "key": "aa",
-    "need_permission_count": 2,
-    "need_permissions": [
-      "test_permission_1",
-      "test_permission_2",
-    ],
-    "value": "",
-  },
-]
-`;
-
-exports[`storage crud > get storages by key include value 1`] = `
+exports[`storage crud > get storages by query 1`] = `
 [
   {
     "comment": "test1",

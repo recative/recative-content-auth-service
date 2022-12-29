@@ -11,6 +11,7 @@ import (
 	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
+	"strings"
 	"time"
 )
 
@@ -19,8 +20,8 @@ type Controller interface {
 	PutTokenInfo(c *gin_context.NoSecurityContext)
 	DeleteToken(c *gin_context.NoSecurityContext)
 	CreateToken(c *gin_context.NoSecurityContext)
-	GetAllTokens(c *gin_context.NoSecurityContext)
-	GetSelectTokens(c *gin_context.NoSecurityContext)
+	GetTokensByQuery(c *gin_context.NoSecurityContext)
+	//GetSelectTokens(c *gin_context.NoSecurityContext)
 	GetSudoToken(c *gin_context.NoSecurityContext)
 	GetTempToken(c *gin_context.NoSecurityContext)
 	PostTempToken(c *gin_context.NoSecurityContext)
@@ -121,8 +122,10 @@ func (con *controller) CreateToken(c *gin_context.NoSecurityContext) {
 	response.Ok(c.C, res)
 }
 
-func (con *controller) GetAllTokens(c *gin_context.NoSecurityContext) {
-	tokens, err := con.service.ReadAllTokens()
+func (con *controller) GetTokensByQuery(c *gin_context.NoSecurityContext) {
+	ids := strings.Split(c.C.Query("ids"), ",")
+
+	tokens, err := con.service.ReadTokensByQuery(ids)
 	if err != nil {
 		response.Err(c.C, err)
 		return
@@ -141,7 +144,7 @@ func (con *controller) GetSelectTokens(c *gin_context.NoSecurityContext) {
 		return
 	}
 
-	tokens, err := con.service.ReadSelectTokens(body)
+	tokens, err := con.service.ReadTokensByQuery(body)
 
 	var res []spec.TokenResponse
 	res = admin_token_format.TokensToResponses(tokens)

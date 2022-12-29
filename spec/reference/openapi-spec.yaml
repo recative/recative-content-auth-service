@@ -148,6 +148,7 @@ paths:
 
         Need admin token which has `read` permission on `X-internalAuthorization` header.
       x-internal: true
+      deprecated: true
     parameters: []
     get:
       summary: Get all storages
@@ -167,6 +168,19 @@ paths:
             default: false
           in: query
           name: include_value
+        - schema:
+            type: string
+          in: query
+          name: keys
+          description: storage keys
+        - schema:
+            type: string
+          in: query
+          name: include_permission
+        - schema:
+            type: string
+          in: query
+          name: exclude_permission
   /admin/storages/query:
     parameters: []
     post:
@@ -221,6 +235,7 @@ paths:
                   items:
                     type: string
         description: ''
+      deprecated: true
   '/admin/permission/{permission_id}':
     get:
       summary: Admin get permission info
@@ -316,8 +331,9 @@ paths:
 
         Need admin token which has `read` permission on `X-internalAuthorization` header.
       x-internal: true
+      deprecated: true
     get:
-      summary: Get all permissions
+      summary: Get permissions by query
       operationId: get-admin-permissions
       responses:
         '200':
@@ -328,6 +344,15 @@ paths:
         Return all permissions.
 
         Need admin token which has `read` permission on `X-internalAuthorization` header.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: ids
+        - schema:
+            type: string
+          in: query
+          name: regex
   /admin/permissions/query:
     post:
       summary: Admin get permission by query params
@@ -357,6 +382,7 @@ paths:
 
         Need admin token which has `read` permission on `X-internalAuthorization` header.
       x-internal: true
+      deprecated: true
     parameters: []
   '/admin/token/{token}':
     parameters:
@@ -433,7 +459,11 @@ paths:
         '200':
           $ref: '#/components/responses/tokensResponse'
       operationId: get-admin-auth-tokens
-      parameters: []
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: ids
       security:
         - X-InternalAuthorization: []
       x-internal: true
@@ -463,6 +493,7 @@ paths:
       security:
         - X-InternalAuthorization: []
       x-internal: true
+      deprecated: true
     parameters: []
   /admin/temp_user_token:
     get:

@@ -64,7 +64,9 @@ describe("admin token crud", () => {
     });
 
     it('get all tokens', async () => {
-        const resp = await RootFetcher.path('/admin/tokens').method('get').create()({})
+        const resp = await RootFetcher.path('/admin/tokens').method('get').create()({
+            ids: "1919810,114514"
+        })
 
         expect (resp.ok).toBe(true)
         const data = resp.data.map((item) => {
