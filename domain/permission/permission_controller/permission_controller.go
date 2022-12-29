@@ -8,6 +8,7 @@ import (
 	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
 	"gorm.io/gorm"
+	"net/url"
 	"strings"
 )
 
@@ -35,6 +36,11 @@ func New(db *gorm.DB, service permission_service.Service) Controller {
 
 func (con *controller) GetPermissionById(c *gin_context.NoSecurityContext) {
 	permissionId := c.C.Param("permission_id")
+	permissionId, err := url.QueryUnescape(permissionId)
+	if err != nil {
+		response.Err(c.C, err)
+		return
+	}
 
 	permission, err := con.service.ReadPermissionById(permissionId)
 	if err != nil {
@@ -49,9 +55,14 @@ func (con *controller) GetPermissionById(c *gin_context.NoSecurityContext) {
 
 func (con *controller) PutPermissionById(c *gin_context.NoSecurityContext) {
 	permissionId := c.C.Param("permission_id")
+	permissionId, err := url.QueryUnescape(permissionId)
+	if err != nil {
+		response.Err(c.C, err)
+		return
+	}
 
 	var body spec.PutAdminPermissionJSONRequestBody
-	err := c.C.ShouldBindJSON(&body)
+	err = c.C.ShouldBindJSON(&body)
 	if err != nil {
 		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
 		return
@@ -70,8 +81,13 @@ func (con *controller) PutPermissionById(c *gin_context.NoSecurityContext) {
 
 func (con *controller) DeletePermissionById(c *gin_context.NoSecurityContext) {
 	permissionId := c.C.Param("permission_id")
+	permissionId, err := url.QueryUnescape(permissionId)
+	if err != nil {
+		response.Err(c.C, err)
+		return
+	}
 
-	_, err := con.service.DeletePermissionById(permissionId)
+	_, err = con.service.DeletePermissionById(permissionId)
 	if err != nil {
 		response.Err(c.C, err)
 		return

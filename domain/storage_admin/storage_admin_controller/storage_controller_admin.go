@@ -8,6 +8,7 @@ import (
 	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
 	"gorm.io/gorm"
+	"net/url"
 	"strconv"
 	"strings"
 )
@@ -38,6 +39,11 @@ func New(db *gorm.DB, service storage_admin_service.Service) Controller {
 
 func (con *controller) GetStorageByKey(c *gin_context.NoSecurityContext) {
 	storageKey := c.C.Param("storage_key")
+	storageKey, err := url.QueryUnescape(storageKey)
+	if err != nil {
+		response.Err(c.C, err)
+		return
+	}
 	isIncludeValue, _ := strconv.ParseBool(c.C.Query("include_value"))
 
 	storage, err := con.service.ReadStorageByKey(storageKey, isIncludeValue)
@@ -53,9 +59,14 @@ func (con *controller) GetStorageByKey(c *gin_context.NoSecurityContext) {
 
 func (con *controller) PutStorageByKey(c *gin_context.NoSecurityContext) {
 	storageKey := c.C.Param("storage_key")
+	storageKey, err := url.QueryUnescape(storageKey)
+	if err != nil {
+		response.Err(c.C, err)
+		return
+	}
 
 	var body spec.PutAdminStorageIdJSONRequestBody
-	err := c.C.ShouldBindJSON(&body)
+	err = c.C.ShouldBindJSON(&body)
 	if err != nil {
 		response.Err(c.C, http_err.InvalidArgument.Wrap(err))
 		return
@@ -73,8 +84,13 @@ func (con *controller) PutStorageByKey(c *gin_context.NoSecurityContext) {
 
 func (con *controller) DeleteStorageByKey(c *gin_context.NoSecurityContext) {
 	storageKey := c.C.Param("storage_key")
+	storageKey, err := url.QueryUnescape(storageKey)
+	if err != nil {
+		response.Err(c.C, err)
+		return
+	}
 
-	_, err := con.service.DeleteStorageByKey(storageKey)
+	_, err = con.service.DeleteStorageByKey(storageKey)
 	if err != nil {
 		response.Err(c.C, err)
 		return
