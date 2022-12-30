@@ -32,6 +32,7 @@ func main() {
 	var httpEngineConfig http_engine.Config
 	config.ForceParseByKey("http_engine", &httpEngineConfig)
 	httpEngine := http_engine.Default(httpEngineConfig)
+	httpEngine.UseRawPath = true
 	httpEngine.AddPing()
 
 	var authConfig auth.Config
