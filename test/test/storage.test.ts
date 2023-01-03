@@ -17,7 +17,7 @@ describe("storage crud", () => {
 
     it('get storage', async () => {
         const resp = await RootFetcher.path('/admin/storage/{storage_key}').method('get').create()({
-            storage_key:"114514",
+            storage_key:"%40N3ERMcqZXqWYgrMCDj0lq%2F237%2Fabstract",
         })
 
         expect (resp.ok).toBe(true)

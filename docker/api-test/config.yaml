@@ -1,6 +1,6 @@
 domain:
   admin_token_config:
-    root_token: "1145141919810"
+    root_token: "63e66149-1bba-4b4d-9c74-4b3336803587"
 database:
   is_api_test: true
   is_auto_migrate: false

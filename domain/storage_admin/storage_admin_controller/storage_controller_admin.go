@@ -3,6 +3,7 @@ package storage_admin_controller
 import (
 	"github.com/recative/recative-backend/domain/storage/storage_format"
 	"github.com/recative/recative-backend/domain/storage_admin/storage_admin_service"
+	"github.com/recative/recative-backend/domain/utils"
 	"github.com/recative/recative-backend/spec"
 	"github.com/recative/recative-service-sdk/pkg/gin_context"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
@@ -10,7 +11,6 @@ import (
 	"gorm.io/gorm"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 type Controller interface {
@@ -142,9 +142,9 @@ func (con *controller) CreateStorage(c *gin_context.NoSecurityContext) {
 //}
 
 func (con *controller) GetStoragesByQuery(c *gin_context.NoSecurityContext) {
-	includePermission := strings.Split(c.C.Query("include_permission"), ",")
-	excludePermission := strings.Split(c.C.Query("exclude_permission"), ",")
-	keys := strings.Split(c.C.Query("keys"), ",")
+	includePermission := utils.SplitQueryParams("include_permission", c.C)
+	excludePermission := utils.SplitQueryParams("exclude_permission", c.C)
+	keys := utils.SplitQueryParams("keys", c.C)
 	isIncludeValue, _ := strconv.ParseBool(c.C.Query("include_value"))
 
 	storages, err := con.service.ReadStoragesByQuery(keys, excludePermission, includePermission, isIncludeValue)

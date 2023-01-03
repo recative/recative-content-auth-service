@@ -3,13 +3,13 @@ package permission_controller
 import (
 	"github.com/recative/recative-backend/domain/permission/permission_format"
 	"github.com/recative/recative-backend/domain/permission/permission_service"
+	"github.com/recative/recative-backend/domain/utils"
 	"github.com/recative/recative-backend/spec"
 	"github.com/recative/recative-service-sdk/pkg/gin_context"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
 	"gorm.io/gorm"
 	"net/url"
-	"strings"
 )
 
 type Controller interface {
@@ -135,7 +135,7 @@ func (con *controller) CreatePermission(c *gin_context.NoSecurityContext) {
 //}
 
 func (con *controller) GetAllPermissions(c *gin_context.NoSecurityContext) {
-	ids := strings.Split(c.C.Query("ids"), ",")
+	ids := utils.SplitQueryParams("ids", c.C)
 	regex := c.C.Query("regex")
 
 	con.service.ReadPermissionsByQuery(ids, regex)
