@@ -231,6 +231,10 @@ func (con *controller) CheckAdminTokenPermission(needPermissions ...string) func
 			return
 		}
 
+		if len(needPermissions) == 0 {
+			return
+		}
+
 		for _, permission := range needPermissions {
 			if lo.Contains(token.AdminPermission, permission) {
 				return
