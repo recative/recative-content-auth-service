@@ -5,13 +5,13 @@ import (
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_config"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_format"
 	"github.com/recative/recative-backend/domain/admin_token/admin_token_service"
+	"github.com/recative/recative-backend/domain/utils"
 	"github.com/recative/recative-backend/spec"
 	"github.com/recative/recative-service-sdk/pkg/gin_context"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
-	"strings"
 	"time"
 )
 
@@ -123,7 +123,7 @@ func (con *controller) CreateToken(c *gin_context.NoSecurityContext) {
 }
 
 func (con *controller) GetTokensByQuery(c *gin_context.NoSecurityContext) {
-	ids := strings.Split(c.C.Query("ids"), ",")
+	ids := utils.SplitQueryParams("ids", c.C)
 
 	tokens, err := con.service.ReadTokensByQuery(ids)
 	if err != nil {
