@@ -65,6 +65,11 @@ paths:
             default: false
           in: query
           name: include_value
+        - schema:
+            type: boolean
+          in: query
+          name: value_only
+          description: direct return value in response body
     put:
       summary: Update storage
       operationId: put-admin-storage_id
@@ -551,6 +556,12 @@ paths:
                 - guard_permission_exist
                 - permissions
         description: ''
+  /admin/cors:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-admin-cors
 components:
   schemas:
     StorageResponse:
@@ -558,7 +569,6 @@ components:
       x-stoplight:
         id: qmt3u6ymcguxu
       type: object
-      description: ''
       properties:
         key:
           type: string
@@ -573,12 +583,15 @@ components:
           type: integer
         comment:
           type: string
+        is_public:
+          type: boolean
       required:
         - key
         - value
         - need_permissions
         - need_permission_count
         - comment
+        - is_public
     StorageRequest:
       title: StorageRequest
       x-stoplight:
@@ -597,6 +610,9 @@ components:
           type: integer
         comment:
           type: string
+        is_public:
+          type: boolean
+          description: 'default is false, if is true need_permissions and need_permission_count won''t work.'
       required:
         - key
         - value

@@ -45,16 +45,21 @@ func (con *controller) GetStorageByKey(c *gin_context.NoSecurityContext) {
 		return
 	}
 	isIncludeValue, _ := strconv.ParseBool(c.C.Query("include_value"))
+	valueOnly, _ := strconv.ParseBool(c.C.Query("value_only"))
 
-	storage, err := con.service.ReadStorageByKey(storageKey, isIncludeValue)
+	storage, err := con.service.ReadStorageByKey(storageKey, isIncludeValue || valueOnly)
 	if err != nil {
 		response.Err(c.C, err)
 		return
 	}
 
-	var res spec.StorageResponse
-	res = storage_format.StorageToResponse(storage)
-	response.Ok(c.C, res)
+	if valueOnly {
+		response.Ok(c.C, storage.Value)
+	} else {
+		var res spec.StorageResponse
+		res = storage_format.StorageToResponse(storage)
+		response.Ok(c.C, res)
+	}
 }
 
 func (con *controller) PutStorageByKey(c *gin_context.NoSecurityContext) {
