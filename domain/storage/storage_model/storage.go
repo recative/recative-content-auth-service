@@ -51,6 +51,7 @@ type StorageParams struct {
 	Value               string
 	NeedPermissions     pq.StringArray `gorm:"type:varchar[]"`
 	NeedPermissionCount int
+	IsPublic            bool
 
 	Comment string
 }

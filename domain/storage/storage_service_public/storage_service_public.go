@@ -31,6 +31,11 @@ func (s *service) ReadStoragesByKeysAndPermissions(keys []string, permissions []
 			return nil, err
 		}
 
+		if storage.IsPublic == true {
+			res = append(res, storage)
+			continue
+		}
+		
 		count := lo.CountBy(permissions, func(permission string) bool {
 			return lo.Contains(storage.NeedPermissions, permission)
 		})

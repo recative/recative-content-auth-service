@@ -39,11 +39,17 @@ func RequestStorageToStorageParam(req spec.StorageRequest) storage_model.Storage
 		needPermission = *req.NeedPermissions
 	}
 
+	var isPublic bool
+	if req.IsPublic != nil {
+		isPublic = *req.IsPublic
+	}
+
 	return storage_model.StorageParams{
 		Comment:             comment,
 		Key:                 req.Key,
 		NeedPermissionCount: needPermissionCount,
 		NeedPermissions:     needPermission,
 		Value:               req.Value,
+		IsPublic:            isPublic,
 	}
 }
